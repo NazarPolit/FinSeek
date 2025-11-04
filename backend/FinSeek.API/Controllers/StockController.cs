@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FinSeek.Application.DTOs.Stock;
+using FinSeek.Application.Interfaces;
 using FinSeek.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,29 +10,30 @@ namespace FinSeek.API.Controllers
 	[ApiController]
 	public class StockController : ControllerBase
 	{
-		private readonly ApplicationDbContext _context;
-		private readonly IMapper _mapper;
+		private readonly IStockService _stockService;
 
-		public StockController(ApplicationDbContext context, IMapper mapper)
+		public StockController(IStockService stockService)
 		{
-			_context = context;
-			_mapper = mapper;
+			_stockService = stockService;
 		}
 
 		[HttpGet]
-		public IActionResult GetAll()
+		public async Task<IActionResult> GetAllStocks()
 		{
-			var stocks = _context.Stocks.ToList();
+			var stocks = await _stockService.GetAllStocksAsync();
 
-			var stocksDto = _mapper.Map<List<StockDTO>>(stocks);
-
-			return Ok(stocksDto);
+			return Ok(stocks);
 		}
 
 		[HttpGet("{id}")]
-		public IActionResult Get(int id)
+		public async Task<IActionResult> GetById(int id)
 		{
-			var stock = _context.Stocks.Find(id);
+			var stock = await _stockService.GetStockByIdAsync(id);
+
+			if (stock == null)
+			{
+				return NotFound();
+			}
 
 			return Ok(stock);
 		}

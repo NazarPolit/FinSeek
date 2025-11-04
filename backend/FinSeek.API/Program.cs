@@ -1,6 +1,10 @@
 
+using FinSeek.Application.Interfaces;
 using FinSeek.Application.Mappings;
+using FinSeek.Application.Services;
+using FinSeek.Domain.Interfaces;
 using FinSeek.Infrastructure.Data;
+using FinSeek.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinSeek.API
@@ -17,6 +21,9 @@ namespace FinSeek.API
 
 			builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+			builder.Services.AddScoped<IStockService, StockService>();
+
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
 
