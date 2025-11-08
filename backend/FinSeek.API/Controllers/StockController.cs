@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using FinSeek.Application.DTOs.Stock;
+using FinSeek.Application.Features.Stocks.Queries.GetStockComments;
+using FinSeek.Application.Features.Stocks.Queries.GetStockList;
 using FinSeek.Application.Interfaces;
 using FinSeek.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -8,34 +9,36 @@ namespace FinSeek.API.Controllers
 {
 	[Route("api/stock")]
 	[ApiController]
-	public class StockController : ControllerBase
+	public class StockController : BaseController
 	{
-		private readonly IStockService _stockService;
+		private readonly IMapper _mapper;
 
-		public StockController(IStockService stockService)
+		public StockController(IMapper mapper)
 		{
-			_stockService = stockService;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetAllStocks()
+		public async Task<ActionResult<StockListVm>> GetAllStocks()
 		{
-			var stocks = await _stockService.GetAllStocksAsync();
+			var query = new GetStockListQuery();
 
-			return Ok(stocks);
+			var vm = await Mediator.Send(query);
+
+			return Ok(vm);
 		}
 
 		[HttpGet("{id}")]
-		public async Task<IActionResult> GetById(int id)
+		public async Task<ActionResult<StockCommentsVm>> GetById(int id)
 		{
-			var stock = await _stockService.GetStockByIdAsync(id);
-
-			if (stock == null)
+			var query = new GetStockCommentsQuery
 			{
-				return NotFound();
-			}
+				Id = id
+			};
 
-			return Ok(stock);
+			var vm = await Mediator.Send(query);
+
+			return Ok(vm);
 		}
     }
 }

@@ -1,0 +1,25 @@
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+namespace FinSeek.API.Controllers
+{
+	[ApiController]
+	[Route("api/[controller]/[action]")]
+	public abstract class BaseController : ControllerBase
+	{
+		private IMediator _mediator;
+		protected IMediator Mediator =>
+			_mediator ?? HttpContext.RequestServices.GetService<IMediator>();
+
+
+		internal Guid UserId
+		{
+			get
+			{
+				var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+				return claim == null ? Guid.Empty : Guid.Parse(claim.Value);
+			}
+		}
+	}
+}

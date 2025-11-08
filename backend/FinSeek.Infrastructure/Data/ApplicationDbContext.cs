@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FinSeek.Application.Interfaces;
 using FinSeek.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinSeek.Infrastructure.Data
 {
-    public class ApplicationDbContext : DbContext
-    {
+    public class ApplicationDbContext : DbContext, IApplicationDbContext
+	{
         public ApplicationDbContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions)
         {

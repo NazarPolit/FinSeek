@@ -1,36 +1,50 @@
-
+using FinSeek.Infrastructure;
+using FinSeek.Application.Common.Mappings;
 using FinSeek.Application.Interfaces;
-using FinSeek.Application.Mappings;
-using FinSeek.Application.Services;
 using FinSeek.Domain.Interfaces;
+using FinSeek.Application;
 using FinSeek.Infrastructure.Data;
 using FinSeek.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using FinSeek.API.Middleware;
 
 namespace FinSeek.API
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
-
 			builder.Services.AddControllers();
 
-			builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+			builder.Services.AddAutoMapper(config =>
+			{
+				config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
+				config.AddProfile(new AssemblyMappingProfile(typeof(IApplicationDbContext).Assembly));
+			});
+
+			builder.Services.AddApplication();
+			builder.Services.AddInfrastructure(builder.Configuration);
+
 			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-			builder.Services.AddScoped<IStockService, StockService>();
+
+			builder.Services.AddAuthorization();
+			builder.Services.AddHttpContextAccessor();
+
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy("AllowAll", policy =>
+				{
+					policy.AllowAnyHeader();
+					policy.AllowAnyMethod();
+					policy.AllowAnyOrigin();
+				});
+			});
 
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
-
-			builder.Services.AddDbContext<ApplicationDbContext>(options =>
-			{
-				options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-			});
 
 			var app = builder.Build();
 
@@ -41,7 +55,10 @@ namespace FinSeek.API
 				app.UseSwaggerUI();
 			}
 
+			app.UseCustomExceptionHandler();
+
 			app.UseHttpsRedirection();
+			app.UseCors("AllowAll");
 
 			app.UseAuthorization();
 
