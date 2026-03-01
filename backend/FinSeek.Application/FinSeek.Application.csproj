@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Comment\" />
-    <Folder Include="DTOs\Stock\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FinSeek.Application.DTOs.Stock;
+using FinSeek.Application.Features.Stocks.Commands;
 using FinSeek.Application.Features.Stocks.Queries.GetStockComments;
 using FinSeek.Application.Features.Stocks.Queries.GetStockList;
 using FinSeek.Application.Interfaces;
@@ -39,6 +41,14 @@ namespace FinSeek.API.Controllers
 			var vm = await Mediator.Send(query);
 
 			return Ok(vm);
+		}
+
+		[HttpPost]
+		public async Task<ActionResult<int>> CreateStock([FromBody] CreateStockDto createStockDto)
+		{
+			var command = _mapper.Map<CreateStockCommand>(createStockDto);
+			var stockId = Mediator.Send(command);
+			return Ok(stockId);
 		}
     }
 }
