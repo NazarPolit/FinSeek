@@ -47,7 +47,7 @@ namespace FinSeek.API.Controllers
 		public async Task<ActionResult<int>> CreateStock([FromBody] CreateStockDto createStockDto)
 		{
 			var command = _mapper.Map<CreateStockCommand>(createStockDto);
-			var stockId = Mediator.Send(command);
+			var stockId = await Mediator.Send(command);
 			return Ok(stockId);
 		}
 
@@ -55,6 +55,19 @@ namespace FinSeek.API.Controllers
 		public async Task <IActionResult> UpdateStock([FromBody] UpdateStockDto updateStockDto)
 		{
 			var command = _mapper.Map<UpdateStockCommand>(updateStockDto);
+
+			await Mediator.Send(command);
+
+			return NoContent();
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteStock(int id)
+		{
+			var command = new DeleteStockCommand
+			{
+				Id = id
+			};
 
 			await Mediator.Send(command);
 
