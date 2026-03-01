@@ -32,8 +32,8 @@ namespace FinSeek.Application.Features.Stocks.Commands
 				MarketCap = request.MarketCap
 			};
 
-			_unitOfWork.Stocks.AddAsync(stock);
-			_unitOfWork.CompleteAsync();
+			await _unitOfWork.Stocks.AddAsync(stock);
+			await _unitOfWork.CompleteAsync();
 
 			return stock.Id;
 		}
