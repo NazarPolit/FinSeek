@@ -9,6 +9,7 @@ namespace FinSeek.Domain.Interfaces
 	public interface IUnitOfWork : IDisposable
 	{
 		IStockRepository Stocks { get; }
+		ICommentRepository Comments { get; }
 
 		Task<int> CompleteAsync();
 	}

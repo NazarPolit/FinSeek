@@ -3,8 +3,6 @@ using FinSeek.Application.DTOs.Stock;
 using FinSeek.Application.Features.Stocks.Commands;
 using FinSeek.Application.Features.Stocks.Queries.GetStockComments;
 using FinSeek.Application.Features.Stocks.Queries.GetStockList;
-using FinSeek.Application.Interfaces;
-using FinSeek.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinSeek.API.Controllers
