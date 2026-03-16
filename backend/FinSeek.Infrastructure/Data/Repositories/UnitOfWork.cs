@@ -12,11 +12,13 @@ namespace FinSeek.Infrastructure.Data.Repositories
 		private readonly ApplicationDbContext _context;
 
 		public IStockRepository Stocks { get; private set; }
+		public ICommentRepository Comments { get; private set; }
 
 		public UnitOfWork(ApplicationDbContext context)
 		{
 			_context = context;
 			Stocks = new StockRepository(_context);
+			Comments = new CommentRepository(_context);
 		}
 
 		public void Dispose()
