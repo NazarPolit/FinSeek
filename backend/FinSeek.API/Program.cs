@@ -3,9 +3,7 @@ using FinSeek.Application.Common.Mappings;
 using FinSeek.Application.Interfaces;
 using FinSeek.Domain.Interfaces;
 using FinSeek.Application;
-using FinSeek.Infrastructure.Data;
 using FinSeek.Infrastructure.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using FinSeek.API.Middleware;
 
