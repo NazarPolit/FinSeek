@@ -26,7 +26,7 @@ namespace FinSeek.Application.Features.Stocks.Queries.GetStockList
         public async Task<StockListVm> Handle(GetStockListQuery request,
             CancellationToken cancellationToken)
         {
-            var stocksQuery = await _unitOfWork.Stocks.GetAllAsync();
+            var stocksQuery = await _unitOfWork.Stocks.GetAllWithComments();
 
             var stockQueryDto = stocksQuery
                 .AsQueryable()

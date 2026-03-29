@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FinSeek.Application.Common.Mappings;
+using FinSeek.Application.Features.Comments.Queries.GetCommentList;
 using FinSeek.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace FinSeek.Application.Features.Stocks.Queries.GetStockList
 		public decimal LastDiv { get; set; }
 		public string Industry { get; set; } = string.Empty;
 		public long MarketCap { get; set; }
+		public List<CommentLookupDto> Comments { get; set; }
 
 		public void Mapping(Profile profile)
 		{
@@ -28,15 +30,17 @@ namespace FinSeek.Application.Features.Stocks.Queries.GetStockList
 				.ForMember(stockDto => stockDto.Symbol,
 					opt => opt.MapFrom(note => note.Symbol))
 				.ForMember(stockDto => stockDto.CompanyName,
-					opt => opt.MapFrom(stock => stock.CompanyName)) 
+					opt => opt.MapFrom(stock => stock.CompanyName))
 				.ForMember(stockDto => stockDto.Purchase,
-						opt => opt.MapFrom(stock => stock.Purchase)) 
+						opt => opt.MapFrom(stock => stock.Purchase))
 				.ForMember(stockDto => stockDto.LastDiv,
 						opt => opt.MapFrom(stock => stock.LastDiv))
 				.ForMember(stockDto => stockDto.Industry,
-						opt => opt.MapFrom(stock => stock.Industry)) 
+						opt => opt.MapFrom(stock => stock.Industry))
 				.ForMember(stockDto => stockDto.MarketCap,
-						opt => opt.MapFrom(stock => stock.MarketCap)); 
+						opt => opt.MapFrom(stock => stock.MarketCap))
+				.ForMember(stockDto => stockDto.Comments,
+						opt => opt.MapFrom(stock => stock.Comments));
 		}
 	}
 

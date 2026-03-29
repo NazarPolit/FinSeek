@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FinSeek.Application.Common.Mappings;
+using FinSeek.Application.Features.Comments.Queries.GetCommentList;
 using FinSeek.Application.Features.Stocks.Queries.GetStockList;
 using FinSeek.Domain.Entities;
 using System;
@@ -20,7 +21,7 @@ namespace FinSeek.Application.Features.Stocks.Queries.GetStockComments
 		public decimal LastDiv { get; set; }
 		public string Industry { get; set; } = string.Empty;
 		public long MarketCap { get; set; }
-		public List<Comment> Comments { get; set; } = new List<Comment>();
+		public List<CommentLookupDto> Comments { get; set; } = new List<CommentLookupDto>();
 		public void Mapping(Profile profile)
 		{
 			profile.CreateMap<Stock, StockCommentsVm>()

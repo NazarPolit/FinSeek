@@ -26,7 +26,7 @@ namespace FinSeek.Application.Features.Stocks.Queries.GetStockComments
 		public async Task<StockCommentsVm> Handle(GetStockCommentsQuery request,
 			CancellationToken cancellationToken)
 		{
-			var entity = await _unitOfWork.Stocks.GetByIdAsync(request.Id);
+			var entity = await _unitOfWork.Stocks.GetByIdWithComments(request.Id);
 
 			if (entity == null)
 			{

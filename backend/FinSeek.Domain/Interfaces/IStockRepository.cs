@@ -9,5 +9,8 @@ namespace FinSeek.Domain.Interfaces
 {
 	public interface IStockRepository : IGenericRepository<Stock>
 	{
+		Task<List<Stock>> GetAllWithComments();
+		Task<Stock> GetByIdWithComments(int Id);
+
 	}
 }
