@@ -6,6 +6,9 @@ using FinSeek.Application;
 using FinSeek.Infrastructure.Data.Repositories;
 using System.Reflection;
 using FinSeek.API.Middleware;
+using FinSeek.Application.Common.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
+using FluentValidation;
 
 namespace FinSeek.API
 {
@@ -59,8 +62,40 @@ namespace FinSeek.API
 				app.UseSwaggerUI();
 			}
 
-			app.UseCustomExceptionHandler();
+			app.UseExceptionHandler(config =>
+			{
+				config.Run(async context =>
+				{
+					var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
 
+					switch (exception)
+					{
+						case ValidationException validationException:
+							context.Response.StatusCode = 400;
+							await context.Response.WriteAsJsonAsync(new
+							{
+								errors = validationException.Errors.Select(e => e.ErrorMessage)
+							});
+							break;
+
+						case NotFoundException notFoundException:
+							context.Response.StatusCode = 404;
+							await context.Response.WriteAsJsonAsync(new
+							{
+								error = notFoundException.Message
+							});
+							break;
+
+						default:
+							context.Response.StatusCode = 500;
+							await context.Response.WriteAsJsonAsync(new
+							{
+								error = exception?.Message
+							});
+							break;
+					}
+				});
+			});
 			app.UseHttpsRedirection();
 			app.UseCors("AllowAll");
 

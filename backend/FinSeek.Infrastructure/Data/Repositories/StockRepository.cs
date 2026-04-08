@@ -26,5 +26,12 @@ namespace FinSeek.Infrastructure.Data.Repositories
 		{
 			return await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == Id);
 		}
+
+		public async Task<Stock?> GetBySymbolAsync(string symbol)
+		{
+			return await _context.Stocks
+				.AsNoTracking()
+				.FirstOrDefaultAsync(x => x.Symbol == symbol);
+		}
 	}
 }

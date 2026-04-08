@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
+using FinSeek.Application.DTOs.Comment;
+using FinSeek.Application.DTOs.Stock;
+using FinSeek.Application.Features.Comments.Commands;
 using FinSeek.Application.Features.Comments.Queries.GetCommentList;
 using FinSeek.Application.Features.Comments.Queries.GetCommentQuery;
+using FinSeek.Application.Features.Stocks.Commands;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinSeek.API.Controllers
@@ -38,5 +42,40 @@ namespace FinSeek.API.Controllers
 
             return Ok(vm);
         }
-    }
+
+		[HttpPost("{stockId}")]
+		public async Task<IActionResult> CreateComment(
+	        [FromBody] CreateCommentDto createCommentDto,
+	        [FromRoute] int stockId)
+		{
+			var command = _mapper.Map<CreateCommentCommand>(createCommentDto);
+
+			command.StockId = stockId;
+
+			var commentId = await Mediator.Send(command);
+
+			var result = new CommentDto
+			{
+				Id = commentId,
+				Title = command.Title,
+				Content = command.Content,
+				StockId = command.StockId
+			};
+
+			return CreatedAtAction(
+				nameof(GetCommentById),
+				new { id = commentId },
+				result
+			);
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteComment(int id)
+		{
+			await Mediator.Send(new DeleteCommentCommand { Id = id });
+
+			return NoContent();
+		}
+
+	}
 }

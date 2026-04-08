@@ -11,6 +11,7 @@ namespace FinSeek.Domain.Interfaces
 	{
 		Task<List<Stock>> GetAllWithComments();
 		Task<Stock> GetByIdWithComments(int Id);
+		Task<Stock?> GetBySymbolAsync(string symbol);
 
 	}
 }
