@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FinSeek.Domain.Helpers;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,6 @@ namespace FinSeek.Application.Features.Stocks.Queries.GetStockList
 {
 	public class GetStockListQuery : IRequest<StockListVm>
 	{
+		public QueryObject Query { get; set; }	
 	}
 }

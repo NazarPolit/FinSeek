@@ -1,4 +1,5 @@
 ﻿using FinSeek.Domain.Entities;
+using FinSeek.Domain.Helpers;
 using FinSeek.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,6 +21,23 @@ namespace FinSeek.Infrastructure.Data.Repositories
 		public async Task<List<Stock>> GetAllWithComments()
 		{
 			return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+		}
+
+		public async Task<List<Stock?>> GetAllWithQueryAsync(QueryObject query)
+		{
+			var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+
+			if(!string.IsNullOrEmpty(query.CompanyName))
+			{
+				stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
+			}
+
+			if (!string.IsNullOrEmpty(query.Symbol))
+			{
+				stocks = stocks.Where(s => s.Symbol.Contains(query.Symbol));
+			}
+			
+			return await stocks.ToListAsync();
 		}
 
 		public async Task<Stock> GetByIdWithComments(int Id)

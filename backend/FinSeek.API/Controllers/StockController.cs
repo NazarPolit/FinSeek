@@ -3,7 +3,9 @@ using FinSeek.Application.DTOs.Stock;
 using FinSeek.Application.Features.Stocks.Commands;
 using FinSeek.Application.Features.Stocks.Queries.GetStockComments;
 using FinSeek.Application.Features.Stocks.Queries.GetStockList;
+using FinSeek.Domain.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FinSeek.API.Controllers
 {
@@ -19,11 +21,11 @@ namespace FinSeek.API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<StockListVm>> GetAllStocks()
+		public async Task<ActionResult<StockListVm>> GetAllStocks([FromQuery] QueryObject query)
 		{
-			var query = new GetStockListQuery();
+			var queryGet = new GetStockListQuery { Query = query };
 
-			var vm = await Mediator.Send(query);
+			var vm = await Mediator.Send(queryGet);
 
 			return Ok(vm);
 		}
