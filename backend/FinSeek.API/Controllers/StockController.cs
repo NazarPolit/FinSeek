@@ -51,10 +51,12 @@ namespace FinSeek.API.Controllers
 			return Ok(stockId);
 		}
 
-		[HttpPut]
-		public async Task <IActionResult> UpdateStock([FromBody] UpdateStockDto updateStockDto)
+		[HttpPut("{id}")]
+		public async Task <IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateStockDto updateStockDto)
 		{
 			var command = _mapper.Map<UpdateStockCommand>(updateStockDto);
+
+			command.Id = id;
 
 			await Mediator.Send(command);
 
