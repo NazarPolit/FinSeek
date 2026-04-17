@@ -4,6 +4,7 @@ using FinSeek.Application.Features.Stocks.Commands;
 using FinSeek.Application.Features.Stocks.Queries.GetStockComments;
 using FinSeek.Application.Features.Stocks.Queries.GetStockList;
 using FinSeek.Domain.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -21,6 +22,7 @@ namespace FinSeek.API.Controllers
 		}
 
 		[HttpGet]
+		[Authorize]
 		public async Task<ActionResult<StockListVm>> GetAllStocks([FromQuery] QueryObject query)
 		{
 			var queryGet = new GetStockListQuery { Query = query };
