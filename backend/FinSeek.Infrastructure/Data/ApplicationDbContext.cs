@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using FinSeek.Application.Interfaces;
 using FinSeek.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinSeek.Infrastructure.Data
 {
-    public class ApplicationDbContext : DbContext, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>, IApplicationDbContext
 	{
         public ApplicationDbContext(DbContextOptions dbContextOptions)
             : base(dbContextOptions)

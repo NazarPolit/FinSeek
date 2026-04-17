@@ -99,6 +99,7 @@ namespace FinSeek.API
 			app.UseHttpsRedirection();
 			app.UseCors("AllowAll");
 
+			app.UseAuthentication();
 			app.UseAuthorization();
 
 
