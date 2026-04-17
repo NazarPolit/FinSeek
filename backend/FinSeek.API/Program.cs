@@ -9,6 +9,7 @@ using FinSeek.API.Middleware;
 using FinSeek.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using FluentValidation;
+using FinSeek.Infrastructure.Services;
 
 namespace FinSeek.API
 {
@@ -30,6 +31,7 @@ namespace FinSeek.API
 			builder.Services.AddInfrastructure(builder.Configuration);
 
 			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+			builder.Services.AddScoped<ITokenService, TokenService>();
 
 			builder.Services.AddAuthorization();
 			builder.Services.AddHttpContextAccessor();

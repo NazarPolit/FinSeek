@@ -1,5 +1,6 @@
-﻿using FinSeek.Application.DTOs.Register;
+﻿using FinSeek.Application.DTOs.Account;
 using FinSeek.Domain.Entities;
+using FinSeek.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace FinSeek.API.Controllers
 	public class AccountController : BaseController
 	{
 		private readonly UserManager<AppUser> _userManager;
+		private readonly ITokenService _tokenService;
 
-		public AccountController(UserManager<AppUser> userManager)
+		public AccountController(UserManager<AppUser> userManager, ITokenService tokenService)
         {
 			_userManager = userManager;
+			_tokenService = tokenService;
 		}
 
 		[HttpPost("register")]
@@ -25,21 +28,28 @@ namespace FinSeek.API.Controllers
 					return BadRequest(ModelState);
 				}
 
-				var appuser = new AppUser
+				var appUser = new AppUser
 				{
 					UserName = registerDto.UserName,
 					Email = registerDto.Email,
 				};
 
-				var createUser = await _userManager.CreateAsync(appuser, registerDto.Password);
+				var createUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
 				if (createUser.Succeeded)
 				{
-					var roleResult = await _userManager.AddToRoleAsync(appuser, "User");
+					var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
 
 					if (roleResult.Succeeded)
 					{
-						return Ok("User created");
+						return Ok(
+							new NewUserDto
+							{
+								UserName = appUser.UserName,
+								Email = appUser.Email,
+								Token = _tokenService.CreateToken(appUser)
+							}
+						);
 					}
 					else
 					{
