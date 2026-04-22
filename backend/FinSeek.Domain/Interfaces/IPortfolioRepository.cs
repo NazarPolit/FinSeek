@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FinSeek.Domain.Interfaces
 {
-	public interface IPortfolioRepository
+	public interface IPortfolioRepository : IGenericRepository<Portfolio>
 	{
 		Task<List<Stock>> GetUserPortfolio(AppUser user);
 	}
