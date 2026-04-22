@@ -116,6 +116,21 @@ namespace FinSeek.Infrastructure.Data.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("FinSeek.Domain.Entities.Portfolio", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("StockId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "StockId");
+
+                    b.HasIndex("StockId");
+
+                    b.ToTable("Portfolios");
+                });
+
             modelBuilder.Entity("FinSeek.Domain.Entities.Stock", b =>
                 {
                     b.Property<int>("Id")
@@ -179,13 +194,13 @@ namespace FinSeek.Infrastructure.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1eda1af8-42aa-41f0-b491-95912d40e63a",
+                            Id = "ff62db4b-9825-4681-90d5-5862c914a68c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a8f79552-5a89-47b9-913e-e6257f69c9c7",
+                            Id = "c349f960-a4d5-4407-81e2-56d765aeac53",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -306,6 +321,25 @@ namespace FinSeek.Infrastructure.Data.Migrations
                     b.Navigation("Stock");
                 });
 
+            modelBuilder.Entity("FinSeek.Domain.Entities.Portfolio", b =>
+                {
+                    b.HasOne("FinSeek.Domain.Entities.AppUser", "AppUser")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinSeek.Domain.Entities.Stock", "Stock")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("StockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("Stock");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -357,9 +391,16 @@ namespace FinSeek.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FinSeek.Domain.Entities.AppUser", b =>
+                {
+                    b.Navigation("Portfolios");
+                });
+
             modelBuilder.Entity("FinSeek.Domain.Entities.Stock", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Portfolios");
                 });
 #pragma warning restore 612, 618
         }
