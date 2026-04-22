@@ -10,6 +10,7 @@ namespace FinSeek.Domain.Interfaces
 	{
 		IStockRepository Stocks { get; }
 		ICommentRepository Comments { get; }
+		IPortfolioRepository Portfolios { get; }
 
 		Task<int> CompleteAsync();
 	}
