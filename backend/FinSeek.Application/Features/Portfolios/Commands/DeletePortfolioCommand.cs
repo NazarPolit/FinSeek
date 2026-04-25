@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FinSeek.Application.Features.Comments.Commands
+namespace FinSeek.Application.Features.Portfolios.Commands
 {
-	public class CreatePortfolioCommand : IRequest<AddPortfolioResult>
+	public class DeletePortfolioCommand : IRequest<DeletePortfolioResult>
 	{
 		public string Symbol { get; set; }
 		public string Username { get; set; }
 
-		public CreatePortfolioCommand(string symbol, string username)
+		public DeletePortfolioCommand(string symbol, string username)
 		{
 			Symbol = symbol;
 			Username = username;

@@ -10,5 +10,6 @@ namespace FinSeek.Domain.Interfaces
 	public interface IPortfolioRepository : IGenericRepository<Portfolio>
 	{
 		Task<List<Stock>> GetUserPortfolio(AppUser user);
+		Task<Portfolio?> GetPortfolioAsync(string appUserId, string symbol);
 	}
 }

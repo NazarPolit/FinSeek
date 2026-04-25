@@ -21,8 +21,4 @@
     <ProjectReference Include="..\FinSeek.Domain\FinSeek.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Portfolios\Commands\" />
-  </ItemGroup>
-
 </Project>

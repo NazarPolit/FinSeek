@@ -1,5 +1,5 @@
 ﻿using FinSeek.Application.Extensions;
-using FinSeek.Application.Features.Comments.Commands;
+using FinSeek.Application.Features.Portfolios.Commands;
 using FinSeek.Application.Features.Portfolios.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,8 +11,6 @@ namespace FinSeek.API.Controllers
 	[Route("api/[controller]")]
 	public class PortfolioController : BaseController
 	{
-		public PortfolioController() { }
-
 		[HttpGet]
 		[Authorize]
 		public async Task<IActionResult> GetUserPortfolio()
@@ -46,6 +44,23 @@ namespace FinSeek.API.Controllers
 			}
 
 			return Created();
+		}
+
+		[HttpDelete]
+		[Authorize]
+		public async Task<IActionResult> DeletePortfolio(string symbol)
+		{
+			var username = User.GetUsername();
+
+			var command = new DeletePortfolioCommand(symbol, username);
+			var result = await Mediator.Send(command);
+
+			if (!result.IsSuccess)
+			{
+				return StatusCode(result.StatusCode, result.ErrorMessage);
+			}
+
+			return Ok();
 		}
 	}
 }

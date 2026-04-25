@@ -32,5 +32,12 @@ namespace FinSeek.Infrastructure.Data.Repositories
 					MarketCap = stock.Stock.MarketCap
 				}).ToListAsync();
 		}
+
+		public async Task<Portfolio?> GetPortfolioAsync(string appUserId, string symbol)
+		{
+			return await _context.Portfolios
+				.FirstOrDefaultAsync(p => p.AppUserId == appUserId &&
+										  p.Stock.Symbol.ToLower() == symbol.ToLower());
+		}
 	}
 }
