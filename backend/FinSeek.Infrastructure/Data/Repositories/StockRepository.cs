@@ -13,6 +13,7 @@ namespace FinSeek.Infrastructure.Data.Repositories
 	public class StockRepository : GenericRepository<Stock>, IStockRepository
 	{
 		private readonly ApplicationDbContext _context;
+
 		public StockRepository(ApplicationDbContext context) : base(context)
 		{
 			_context = context;
@@ -20,14 +21,20 @@ namespace FinSeek.Infrastructure.Data.Repositories
 
 		public async Task<List<Stock>> GetAllWithComments()
 		{
-			return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+			return await _context.Stocks
+				.Include(c => c.Comments)
+					.ThenInclude(comment => comment.AppUser)
+				.ToListAsync();
 		}
 
 		public async Task<List<Stock?>> GetAllWithQueryAsync(QueryObject query)
 		{
-			var stocks = _context.Stocks.Include(c => c.Comments).AsQueryable();
+			var stocks = _context.Stocks
+				.Include(c => c.Comments)
+					.ThenInclude(comment => comment.AppUser)
+				.AsQueryable();
 
-			if(!string.IsNullOrEmpty(query.CompanyName))
+			if (!string.IsNullOrEmpty(query.CompanyName))
 			{
 				stocks = stocks.Where(s => s.CompanyName.Contains(query.CompanyName));
 			}
@@ -39,7 +46,7 @@ namespace FinSeek.Infrastructure.Data.Repositories
 
 			if (!string.IsNullOrEmpty(query.SortBy))
 			{
-				if(query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+				if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
 				{
 					stocks = query.IsDescending ? stocks.OrderByDescending(s => s.Symbol) : stocks.OrderBy(s => s.Symbol);
 				}
@@ -52,7 +59,10 @@ namespace FinSeek.Infrastructure.Data.Repositories
 
 		public async Task<Stock> GetByIdWithComments(int Id)
 		{
-			return await _context.Stocks.Include(c => c.Comments).FirstOrDefaultAsync(i => i.Id == Id);
+			return await _context.Stocks
+				.Include(c => c.Comments)
+					.ThenInclude(comment => comment.AppUser)
+				.FirstOrDefaultAsync(i => i.Id == Id);
 		}
 
 		public async Task<Stock?> GetBySymbolAsync(string symbol)

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace FinSeek.Domain.Interfaces
 {
-    public interface ICommentRepository: IGenericRepository<Comment>
-    {
-    }
+	public interface ICommentRepository : IGenericRepository<Comment>
+	{
+		Task<List<Comment>> GetAllWithUserAsync();
+		Task<Comment?> GetByIdWithUserAsync(int id);
+	}
 }

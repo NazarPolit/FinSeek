@@ -12,5 +12,6 @@ namespace FinSeek.Application.Features.Comments.Commands
 		public string Title { get; set; } = string.Empty;
 		public string Content { get; set; } = string.Empty;
 		public int StockId { get; set; }
+		public string Username { get; set; } = string.Empty;
 	}
 }

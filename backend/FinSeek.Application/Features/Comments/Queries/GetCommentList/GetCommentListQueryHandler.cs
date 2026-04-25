@@ -18,17 +18,17 @@ namespace FinSeek.Application.Features.Comments.Queries.GetCommentList
             _mapper = mapper;
         }
 
-        public async Task<CommentListVm> Handle(GetCommentListQuery request,
-            CancellationToken cancellationToken)
-        {
-            var CommentsQuery = await _unitOfWork.Comments.GetAllAsync();
+		public async Task<CommentListVm> Handle(GetCommentListQuery request,
+			CancellationToken cancellationToken)
+		{
+			var CommentsQuery = await _unitOfWork.Comments.GetAllAsync();
 
-            var CommentQueryDto = CommentsQuery
-                .AsQueryable()
-                .ProjectTo<CommentLookupDto>(_mapper.ConfigurationProvider)
-                .ToList();
+			var CommentQueryDto = CommentsQuery
+				.AsQueryable()
+				.ProjectTo<CommentLookupDto>(_mapper.ConfigurationProvider)
+				.ToList();
 
-            return new CommentListVm { Comments = CommentQueryDto };
-        }
-    }
+			return new CommentListVm { Comments = CommentQueryDto };
+		}
+	}
 }

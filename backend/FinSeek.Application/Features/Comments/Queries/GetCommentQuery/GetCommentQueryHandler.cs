@@ -23,17 +23,16 @@ namespace FinSeek.Application.Features.Comments.Queries.GetCommentQuery
             _mapper = mapper;
         }
 
-        public async Task<CommentVm> Handle(GetCommentQuery request,
-            CancellationToken cancellationToken)
-        {
-            var entity = await _unitOfWork.Comments.GetByIdAsync(request.Id);
+		public async Task<CommentVm> Handle(GetCommentQuery request, CancellationToken cancellationToken)
+		{
+			var entity = await _unitOfWork.Comments.GetByIdWithUserAsync(request.Id);
 
-            if (entity == null)
-            {
-                throw new NotFoundException(nameof(Comment), request.Id);
-            }
+			if (entity == null)
+			{
+				throw new NotFoundException(nameof(Comment), request.Id);
+			}
 
-            return _mapper.Map<CommentVm>(entity);
-        }
-    }
+			return _mapper.Map<CommentVm>(entity);
+		}
+	}
 }
