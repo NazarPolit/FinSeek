@@ -14,52 +14,57 @@ namespace FinSeek.Application.Features.Portfolios.Commands
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+		private readonly IFMPService _fmpService;
 
-        public AddPortfolioCommandHandler(UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
+		public AddPortfolioCommandHandler(
+			UserManager<AppUser> userManager, 
+			IUnitOfWork unitOfWork,
+			IFMPService fmpService)
         {
             _userManager = userManager;
             _unitOfWork = unitOfWork;
-        }
+			_fmpService = fmpService;
+		}
 
         public async Task<AddPortfolioResult> Handle(CreatePortfolioCommand request, CancellationToken cancellationToken)
         {
-            var appUser = await _userManager.FindByNameAsync(request.Username);
+			var appUser = await _userManager.FindByNameAsync(request.Username);
+			if (appUser == null) return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "User not found" };
 
-            if (appUser == null)
-            {
-                return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "User not found" };
-            }
+			var stock = await _unitOfWork.Stocks.GetBySymbolAsync(request.Symbol);
 
-            var stock = await _unitOfWork.Stocks.GetBySymbolAsync(request.Symbol);
+			if (stock == null)
+			{
+				stock = await _fmpService.FindStockBySymbolAsync(request.Symbol);
 
-            if (stock == null)
-            {
-                return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "Stock not found" };
-            }
+				if (stock == null)
+				{
+					return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "Stock does not exist" };
+				}
 
-            var userPortfolio = await _unitOfWork.Portfolios.GetUserPortfolio(appUser);
+				await _unitOfWork.Stocks.AddAsync(stock);
+				await _unitOfWork.CompleteAsync();
+			}
 
-            if (userPortfolio.Any(e => e.Symbol.ToLower() == request.Symbol.ToLower()))
-            {
-                return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "Cannot add same stock to portfolio" };
-            }
+			var userPortfolio = await _unitOfWork.Portfolios.GetUserPortfolio(appUser);
 
-            var portfolioModel = new Portfolio
-            {
-                StockId = stock.Id,
-                AppUserId = appUser.Id
-            };
+			if (userPortfolio.Any(e => e.Symbol.ToLower() == request.Symbol.ToLower()))
+			{
+				return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "Cannot add same stock to portfolio" };
+			}
 
-            await _unitOfWork.Portfolios.AddAsync(portfolioModel);
+			var portfolioModel = new Portfolio
+			{
+				StockId = stock.Id,
+				AppUserId = appUser.Id
+			};
 
-            var saved = await _unitOfWork.CompleteAsync();
+			await _unitOfWork.Portfolios.AddAsync(portfolioModel);
+			var saved = await _unitOfWork.CompleteAsync();
 
-            if (saved <= 0)
-            {
-                return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "Could not create", StatusCode = 500 };
-            }
+			if (saved <= 0) return new AddPortfolioResult { IsSuccess = false, ErrorMessage = "Could not create portfolio", StatusCode = 500 };
 
-            return new AddPortfolioResult { IsSuccess = true };
-        }
-    }
+			return new AddPortfolioResult { IsSuccess = true };
+		}
+	}
 }

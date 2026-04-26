@@ -33,6 +33,9 @@ namespace FinSeek.API
 
 			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 			builder.Services.AddScoped<ITokenService, TokenService>();
+			builder.Services.AddScoped<IFMPService, FMPService>();
+			builder.Services.AddHttpClient<IFMPService, FMPService>();
+
 
 			builder.Services.AddAuthorization();
 			builder.Services.AddHttpContextAccessor();

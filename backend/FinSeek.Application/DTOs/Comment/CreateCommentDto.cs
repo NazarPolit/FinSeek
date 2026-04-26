@@ -16,13 +16,7 @@ namespace FinSeek.Application.DTOs.Comment
 
 		public void Mapping(Profile profile)
 		{
-			profile.CreateMap<CreateCommentDto, CreateCommentCommand>()
-				.ForMember(commentCommand => commentCommand.Title,
-					opt => opt.MapFrom(commentDto => commentDto.Title))
-				.ForMember(commentCommand => commentCommand.Content,
-					opt => opt.MapFrom(commentDto => commentDto.Content))
-				.ForMember(commentCommand => commentCommand.StockId,
-					opt => opt.Ignore());
+			profile.CreateMap<CreateCommentDto, CreateCommentCommand>();
 		}
 	}
 }

@@ -18,8 +18,7 @@ namespace FinSeek.Application.Features.Comments.Commands
 			RuleFor(x => x.Content)
 				.NotEmpty().WithMessage("Content is required");
 
-			RuleFor(x => x.StockId)
-				.GreaterThan(0);
+			RuleFor(x => x.Symbol).NotEmpty();
 		}
 	}
 }

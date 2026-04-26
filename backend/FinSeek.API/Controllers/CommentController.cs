@@ -6,6 +6,7 @@ using FinSeek.Application.Features.Comments.Commands;
 using FinSeek.Application.Features.Comments.Queries.GetCommentList;
 using FinSeek.Application.Features.Comments.Queries.GetCommentQuery;
 using FinSeek.Application.Features.Stocks.Commands;
+using FinSeek.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -45,33 +46,23 @@ namespace FinSeek.API.Controllers
             return Ok(vm);
         }
 
-		[HttpPost("{stockId}")]
+		[HttpPost("{symbol}")]
 		[Authorize]
 		public async Task<IActionResult> CreateComment(
 			[FromBody] CreateCommentDto createCommentDto,
-			[FromRoute] int stockId)
+			[FromRoute] string symbol)
 		{
 			var username = User.GetUsername();
 
 			var command = _mapper.Map<CreateCommentCommand>(createCommentDto);
-
-			command.StockId = stockId;
+			command.Symbol = symbol;
 			command.Username = username;
 
-			var commentId = await Mediator.Send(command);
-
-			var result = new CommentDto
-			{
-				Id = commentId,
-				Title = command.Title,
-				Content = command.Content,
-				StockId = command.StockId,
-				CreatedBy = username
-			};
+			var result = await Mediator.Send(command);
 
 			return CreatedAtAction(
 				nameof(GetCommentById),
-				new { id = commentId },
+				new { id = result.Id },
 				result
 			);
 		}
