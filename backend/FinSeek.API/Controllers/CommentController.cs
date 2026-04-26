@@ -7,6 +7,7 @@ using FinSeek.Application.Features.Comments.Queries.GetCommentList;
 using FinSeek.Application.Features.Comments.Queries.GetCommentQuery;
 using FinSeek.Application.Features.Stocks.Commands;
 using FinSeek.Domain.Entities;
+using FinSeek.Domain.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,17 +24,18 @@ namespace FinSeek.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<CommentListVm>> GetAllComments()
-        {
-            var query = new GetCommentListQuery();
+		[HttpGet]
+		[Authorize]
+		public async Task<ActionResult<CommentListVm>> GetAllComments([FromQuery] CommentQueryObject queryObject)
+		{
+			var query = new GetCommentListQuery(queryObject);
 
-            var vm = await Mediator.Send(query);
+			var vm = await Mediator.Send(query);
 
-            return Ok(vm);
-        }
+			return Ok(vm);
+		}
 
-        [HttpGet("{id}")]
+		[HttpGet("{id}")]
         public async Task<ActionResult<CommentListVm>> GetCommentById(int id)
         {
             var query = new GetCommentQuery

@@ -1,34 +1,30 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using FinSeek.Application.Features.Comments.Queries.GetCommentList;
 using FinSeek.Domain.Interfaces;
 using MediatR;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FinSeek.Application.Features.Comments.Queries.GetCommentList
-{ 
-    public class GetCommentListQueryHandler
-        : IRequestHandler<GetCommentListQuery, CommentListVm>
-    {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+{
+	public class GetCommentListQueryHandler : IRequestHandler<GetCommentListQuery, CommentListVm>
+	{
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
 
-        public GetCommentListQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
-		public async Task<CommentListVm> Handle(GetCommentListQuery request,
-			CancellationToken cancellationToken)
+		public GetCommentListQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
 		{
-			var CommentsQuery = await _unitOfWork.Comments.GetAllAsync();
+			_unitOfWork = unitOfWork;
+			_mapper = mapper;
+		}
 
-			var CommentQueryDto = CommentsQuery
-				.AsQueryable()
-				.ProjectTo<CommentLookupDto>(_mapper.ConfigurationProvider)
-				.ToList();
+		public async Task<CommentListVm> Handle(GetCommentListQuery request, CancellationToken cancellationToken)
+		{
+			var commentsQuery = await _unitOfWork.Comments.GetAllWithQueryAsync(request.QueryObject);
 
-			return new CommentListVm { Comments = CommentQueryDto };
+			var commentQueryDto = _mapper.Map<List<CommentLookupDto>>(commentsQuery);
+
+			return new CommentListVm { Comments = commentQueryDto };
 		}
 	}
 }

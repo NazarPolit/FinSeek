@@ -1,4 +1,5 @@
 ﻿using FinSeek.Domain.Entities;
+using FinSeek.Domain.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace FinSeek.Domain.Interfaces
 	{
 		Task<List<Comment>> GetAllWithUserAsync();
 		Task<Comment?> GetByIdWithUserAsync(int id);
+		Task<List<Comment>> GetAllWithQueryAsync(CommentQueryObject query);
 	}
 }
