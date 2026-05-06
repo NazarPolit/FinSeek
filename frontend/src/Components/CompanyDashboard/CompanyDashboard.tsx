@@ -3,9 +3,10 @@ import { Outlet } from 'react-router-dom'
 
 type Props = {
     children: React.ReactNode;
+    ticker: string;
 }
 
-const CompanyDashboard = ({children}: Props) => {
+const CompanyDashboard = ({children, ticker}: Props) => {
   return (
     <div className="relative md:ml-64 bg-surfaceLight w-full min-h-screen">
         <div className="relative pt-10 pb-12 bg-brandBlue shadow-md">
@@ -16,7 +17,7 @@ const CompanyDashboard = ({children}: Props) => {
             </div>
         </div>
         <div className="px-6 md:px-10 mx-auto w-full mt-8">
-            <Outlet />
+            <Outlet context = {ticker}/>
         </div>
 
     </div>
