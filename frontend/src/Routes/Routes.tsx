@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import App from "../App";
 import HomePage from "../Pages/HomePage/HomePage";
 import SearchPage from "../Pages/SearchPage/SearchPage";
@@ -19,6 +19,7 @@ export const router = createBrowserRouter([
                 path: "company/:ticker", 
                 element: <CompanyPage />,
                 children: [
+                    { index: true, element: <Navigate to="company-profile" replace /> },
                     {path: "company-profile", element: <CompanyProfile />},
                     {path: "income-statement", element: <IncomeStatement />},
                 ],

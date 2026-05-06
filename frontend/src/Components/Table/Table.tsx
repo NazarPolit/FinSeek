@@ -1,53 +1,48 @@
 import React from 'react'
-import { testIncomeStatementData } from './testData';
 
-const data = testIncomeStatementData;
+type Props = {
+    config: any;
+    data: any;
+};
 
-type Props = {};
-
-type Company = (typeof data)[0];
-
-const configs = [
-    {
-        label: "Year",
-        render: (company: Company) => company.acceptedDate
-    },
-    {
-        label: "Cost of Revenue",
-        render: (company: Company) => company.costOfRevenue
-    }
-]
-
-const Table = (props: Props) => {
-    const renderedRows = data.map((company) => {
+const Table = ({ config, data }: Props) => {
+    const renderedRows = data.map((company: any, index: number) => {
         return(
-            <tr key = {company.cik}>
-                {configs.map((val:any) => {
+            <tr key={company.cik || index} className="hover:bg-slate-50/50 transition-colors duration-150 border-b border-slate-100 last:border-0">
+                {config.map((val: any, colIndex: number) => {
                     return (
-                        <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">{val.render(company)}</td>
+                        <td key={colIndex} className="p-4 whitespace-nowrap text-sm font-medium text-slate-700">
+                            {val.render(company)}
+                        </td>
                     )
-                })};
+                })}
             </tr>
         )
     });
-  const renderedHeaders = configs.map((config: any) => {
-  return (
-    <th
-      className="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-      key={config.label}
-    >
-      {config.label}
-    </th>
-  );
-});
-  return (
-    <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
-        <table>
-            <thead className="min-w-full divide-y divide=gray-200 m-5">{renderedHeaders}</thead>
-            <tbody>{renderedRows}</tbody>
-        </table>
-    </div>
-  )
+
+    const renderedHeaders = config.map((configItem: any, index: number) => {
+        return (
+            <th
+                className="p-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider bg-slate-50"
+                key={configItem.label || index}
+            >
+                {configItem.label}
+            </th>
+        );
+    });
+
+    return (
+        <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-2xl w-full border border-slate-100 overflow-hidden mb-6">
+            <div className="overflow-x-auto">
+                <table className="min-w-full text-left border-collapse">
+                    <thead>
+                        <tr>{renderedHeaders}</tr>
+                    </thead>
+                    <tbody>{renderedRows}</tbody>
+                </table>
+            </div>
+        </div>
+    )
 }
 
 export default Table
