@@ -10,16 +10,18 @@ interface Props {
 };
 
 const CardList : React.FC<Props> = ({searchResults, onPortfolioCreate}: Props) : JSX.Element => {
-  return <>
+  return <div className="w-full">
   {searchResults.length > 0 ? (
     searchResults.map((result) => {
       return <Card id={result.symbol} key={uuidv4()} searchResult={result} onPortfolioCreate={onPortfolioCreate}/>;
     })
   ): (
-      <p className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl">
-          No results!
-      </p>
-  )}</>;
+      <div className="p-12 mt-6 text-center bg-surface border-2 border-brandBlueLight border-dashed rounded-2xl">
+         <p className="text-lg font-medium text-textMuted">
+            No results found. Try a different ticker or company name.
+         </p>
+      </div>
+  )}</div>;
 };
 
 export default CardList

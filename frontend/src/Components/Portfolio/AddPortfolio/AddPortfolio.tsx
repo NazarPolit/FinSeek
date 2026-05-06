@@ -11,8 +11,11 @@ const AddPortfolio = ({onPortfolioCreate, symbol}: Props) => {
         <input readOnly={true} hidden={true} value={symbol} />
         <button
           type="submit"
-          className="p-2 px-8 text-white bg-darkBlue rounded-lg hover:opacity-70 focus:outline-none"
+          className="flex items-center gap-2 px-6 py-2.5 text-sm font-bold text-white bg-brandGreen rounded-xl hover:bg-brandGreenHover shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-brandGreen/30"
         >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
           Add
         </button>
     </form>

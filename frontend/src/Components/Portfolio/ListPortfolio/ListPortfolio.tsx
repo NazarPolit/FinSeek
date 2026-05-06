@@ -8,27 +8,36 @@ interface Props {
 
 const ListPortfolio = ({portfolioValues, onPortfolioDelete}: Props) => {
   return (
-    <section id="portfolio">
-      <h2 className="mb-3 mt-3 text-3xl font-semibold text-center md:text-4xl">
-        My Portfolio
-      </h2>
-      <div className="relative flex flex-col items-center max-w-5xl mx-auto space-y-10 px-10 mb-5 md:px-6 md:space-y-0 md:space-x-7 md:flex-row">
-        <>
+    <section id="portfolio" className="py-12 bg-surfaceLight">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-extrabold text-textMain tracking-tight">
+            My Portfolio
+          </h2>
+          <span className="px-4 py-1.5 bg-brandGreen/10 text-brandGreen font-bold rounded-full text-sm border border-brandGreen/20">
+            {portfolioValues.length} Assets
+          </span>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {portfolioValues.length > 0 ? (
             portfolioValues.map((portfolioValue) => {
               return (
                 <CardPortfolio
+                  key={portfolioValue}
                   portfolioValue={portfolioValue}
                   onPortfolioDelete={onPortfolioDelete}
                 />
               );
             })
           ) : (
-            <h3 className="mb-3 mt-3 text-xl font-semibold text-center md:text-xl">
-              Your portfolio is empty.
-            </h3>
+            <div className="col-span-full p-10 text-center bg-surface border border-slate-200 rounded-3xl shadow-sm">
+              <h3 className="text-lg font-medium text-textMuted">
+                Your portfolio is empty. Add some stocks above to start tracking.
+              </h3>
+            </div>
           )}
-        </>
+        </div>
       </div>
     </section>
   );

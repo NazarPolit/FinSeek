@@ -10,16 +10,23 @@ module.exports = {
     },
     extend: {
       colors: {
-        lightBlue: "hsl(215.02, 98.39%, 51.18%)",
-        darkBlue: "hsl(213.86, 58.82%, 46.67%)",
-        lightGreen: "hsl(127, 87%, 33%)",
+        brandBlue: "#1C5BB7", 
+        brandBlueLight: "#E8F0FE",
+        brandGreen: "#70C128",
+        brandGreenHover: "#5AA01E",
+        
+        surface: "#FFFFFF",
+        surfaceLight: "#F8FAFC", 
+        textMain: "#0F172A", 
+        textMuted: "#64748B", 
       },
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
+        sans: ["Poppins", "Inter", "sans-serif"],
       },
-      spacing: {
-        180: "32rem",
-      },
+      boxShadow: {
+        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+        'card-hover': '0 10px 15px -3px rgba(28, 91, 183, 0.1), 0 4px 6px -2px rgba(28, 91, 183, 0.05)', // Тінь з легким синім відтінком
+      }
     },
   },
   plugins: [],

@@ -1,32 +1,34 @@
 import React from 'react'
 import hero from "./hero.png"
-
+import { Link } from 'react-router-dom'
 
 interface Props {}
 
 const Hero = (props: Props) => {
   return (
-     <section id="hero">
-      <div className="container flex flex-col-reverse mx-auto p-8 lg:flex-row">
-        <div className="flex flex-col space-y-10 mb-44 m-10 lg:m-10 xl:m-20 lg:mt:16 lg:w-1/2 xl:mb-52">
-          <h1 className="text-5xl font-bold text-center lg:text-6xl lg:max-w-md lg:text-left">
-            Financial data with no news.
+     <section id="hero" className="bg-surfaceLight pt-10 pb-20">
+      <div className="container flex flex-col-reverse mx-auto px-6 lg:flex-row items-center">
+        <div className="flex flex-col space-y-8 lg:w-1/2 mt-10 lg:mt-0">
+          <h1 className="text-5xl font-extrabold text-center text-textMain lg:text-6xl lg:text-left leading-tight tracking-tight">
+            Financial data with <span className="text-brandBlue">no news.</span>
           </h1>
-          <p className="text-2xl text-center text-gray-400 lg:max-w-md lg:text-left">
-            Search relevant financial documents without fear mongering and fake
-            news.
+          <p className="text-xl text-center text-textMuted lg:text-left md:max-w-xl mx-auto lg:mx-0">
+            Search relevant financial documents, track your portfolio, and evaluate stocks without fear-mongering and fake news.
           </p>
-          <div className="mx-auto lg:mx-0">
-            <a
-              href=""
-              className="py-5 px-10 text-2xl font-bold text-white bg-lightGreen rounded lg:py-4 hover:opacity-70"
+          <div className="flex justify-center lg:justify-start">
+            <Link
+              to="/search"
+              className="px-8 py-4 text-lg font-bold text-white bg-brandGreen rounded-xl hover:bg-brandGreenHover shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
-              Get Started
-            </a>
+              Get Started Now
+            </Link>
           </div>
         </div>
-        <div className="mb-24 mx-auto md:w-180 md:px-10 lg:mb-0 lg:w-1/2">
-          <img src={hero} alt="" />
+        <div className="lg:w-1/2 flex justify-center">
+          <div className="relative">
+            <div className="absolute inset-0 bg-brandBlue opacity-10 rounded-full blur-3xl transform scale-110"></div>
+            <img src={hero} alt="Financial Dashboard Analysis" className="relative z-10 drop-shadow-2xl md:w-[500px]" />
+          </div>
         </div>
       </div>
     </section>
