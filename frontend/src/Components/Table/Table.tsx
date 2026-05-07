@@ -23,7 +23,7 @@ const Table = ({ config, data }: Props) => {
     const renderedHeaders = config.map((configItem: any, index: number) => {
         return (
             <th
-                className="p-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider bg-slate-50"
+                className="p-4 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider bg-slate-50 whitespace-nowrap"
                 key={configItem.label || index}
             >
                 {configItem.label}
@@ -32,8 +32,8 @@ const Table = ({ config, data }: Props) => {
     });
 
     return (
-        <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-2xl w-full border border-slate-100 overflow-hidden mb-6">
-            <div className="overflow-x-auto">
+        <div className="bg-white shadow-sm hover:shadow-md transition-shadow rounded-2xl border border-slate-100 mb-6 w-full overflow-hidden flex flex-col">
+            <div className="overflow-x-auto max-w-full">
                 <table className="min-w-full text-left border-collapse">
                     <thead>
                         <tr>{renderedHeaders}</tr>

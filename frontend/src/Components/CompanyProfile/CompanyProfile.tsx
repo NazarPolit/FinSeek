@@ -20,7 +20,7 @@ const tableConfig = [
   {
     label: "EV to EBITDA",
     render: (company: CompanyKeyMetrics) => company.evToEBITDATTM?.toFixed(2),
-    subTitle: "Valuation multiple comparing enterprise value to earnings (lower is often better)",
+    subTitle: "Valuation multiple comparing enterprise value to earnings",
   },
   {
     label: "EV to Sales",
@@ -30,32 +30,32 @@ const tableConfig = [
   {
     label: "Current Ratio",
     render: (company: CompanyKeyMetrics) => company.currentRatioTTM?.toFixed(2),
-    subTitle: "Measures a company's ability to pay short-term obligations (ideal is > 1)",
+    subTitle: "Measures a company's ability to pay short-term obligations",
   },
   {
     label: "Net Debt to EBITDA",
     render: (company: CompanyKeyMetrics) => company.netDebtToEBITDATTM?.toFixed(2),
-    subTitle: "Measurement of leverage, showing how many years it would take to pay back debt",
+    subTitle: "Measurement of leverage",
   },
   {
     label: "Return On Equity (ROE)",
     render: (company: CompanyKeyMetrics) => `${(company.returnOnEquityTTM * 100).toFixed(2)}%`,
-    subTitle: "Profitability relative to shareholders' equity (how efficiently they use investments)",
+    subTitle: "Profitability relative to shareholders' equity",
   },
   {
     label: "Return On Assets (ROA)",
     render: (company: CompanyKeyMetrics) => `${(company.returnOnAssetsTTM * 100).toFixed(2)}%`,
-    subTitle: "Profitability relative to total assets (how efficient management is at using its assets)",
+    subTitle: "Profitability relative to total assets",
   },
   {
     label: "Earnings Yield",
     render: (company: CompanyKeyMetrics) => `${(company.earningsYieldTTM * 100).toFixed(2)}%`,
-    subTitle: "Earnings per share divided by the share price (the inverse of P/E ratio)",
+    subTitle: "Earnings per share divided by the share price",
   },
   {
     label: "Cash Conversion Cycle",
     render: (company: CompanyKeyMetrics) => `${company.cashConversionCycleTTM?.toFixed(0)} days`,
-    subTitle: "How many days it takes to convert inventory investments into cash flows",
+    subTitle: "Days to convert inventory investments into cash flows",
   },
 ];
 
@@ -76,15 +76,18 @@ const CompanyProfile = (props: Props) => {
   }, [ticker]);
 
   return (
-    <>
+    <div className="w-full flex flex-col">
+      <div className="mb-6">
+          <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">Company Profile</h2>
+          <p className="text-slate-500 text-sm mt-1">Key financial metrics, valuation ratios, and profitability indicators.</p>
+      </div>
+
       {companyData ? (
-        <>
-          <RatioList config={tableConfig} data={companyData} />
-        </>
+        <RatioList config={tableConfig} data={companyData} />
       ) : (
-        <h1 className="text-slate-500 font-medium">Loading or No data found...</h1>
+        <div className="text-slate-500 font-medium">Loading profile data...</div>
       )}
-    </>
+    </div>
   );
 };
 

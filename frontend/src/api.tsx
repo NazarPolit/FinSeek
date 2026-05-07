@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CompanyKeyMetrics, CompanyProfile, CompanySearch } from "./company"
+import { CompanyIncomeStatement, CompanyKeyMetrics, CompanyProfile, CompanySearch } from "./company"
 
 interface SearchResponse{
     data: CompanySearch[];
@@ -15,7 +15,6 @@ export const searchCompanies = async (query: string) => {
         const err = error as any;
 
         if (err && err.isAxiosError) {
-            // Спеціальна обробка для помилки 429 (Too Many Requests)
             if (err.response?.status === 429) {
                 console.warn("API Rate Limit Exceeded!");
                 return "API limit reached. Please try again tomorrow or upgrade your API plan.";
@@ -63,3 +62,21 @@ export const getKeyMetrics = async (query: string) => {
         console.log("error message from API: ", error.message);
     }
 }
+
+export const getIncomeStatement = async (
+  query: string
+): Promise<CompanyIncomeStatement[]> => {
+  try {
+    const response = await axios.get<CompanyIncomeStatement[]>(
+      `https://financialmodelingprep.com/stable/income-statement?symbol=${query}&apikey=${process.env.REACT_APP_API_KEY}`
+    );
+
+    return response.data;
+  } catch (error: any) {
+    if (error.response?.status === 429) {
+      throw new Error("API limit reached.");
+    }
+
+    throw new Error(error.message);
+  }
+};

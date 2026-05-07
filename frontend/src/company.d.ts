@@ -118,7 +118,7 @@ export interface CompanyIncomeStatement {
   revenue: number;
   costOfRevenue: number;
   grossProfit: number;
-  grossProfitRatio: number;
+  grossProfitRatio?: number; // Зробили опціональним
   researchAndDevelopmentExpenses: number;
   generalAndAdministrativeExpenses: number;
   sellingAndMarketingExpenses: number;
@@ -130,17 +130,17 @@ export interface CompanyIncomeStatement {
   interestExpense: number;
   depreciationAndAmortization: number;
   ebitda: number;
-  ebitdaratio: number;
+  ebitdaratio?: number; 
   operatingIncome: number;
-  operatingIncomeRatio: number;
+  operatingIncomeRatio?: number;
   totalOtherIncomeExpensesNet: number;
   incomeBeforeTax: number;
-  incomeBeforeTaxRatio: number;
+  incomeBeforeTaxRatio?: number;
   incomeTaxExpense: number;
   netIncome: number;
-  netIncomeRatio: number;
+  netIncomeRatio?: number;
   eps: number;
-  epsdiluted: number;
+  epsDiluted: number;
   weightedAverageShsOut: number;
   weightedAverageShsOutDil: number;
   link: string;
