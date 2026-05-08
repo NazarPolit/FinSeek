@@ -58,18 +58,35 @@ const tableConfig = [
     render: (company: CompanyKeyMetrics) => `${company.cashConversionCycleTTM?.toFixed(0)} days`,
     subTitle: "Days to convert inventory investments into cash flows",
   },
+ {
+    label: "Free Cash Flow Yield",
+    render: (company: CompanyKeyMetrics) => company.freeCashFlowYieldTTM ? `${(company.freeCashFlowYieldTTM * 100).toFixed(2)}%` : "N/A",
+    subTitle: "Free cash flow normalized by market value (higher is better)",
+  },
 ];
 
 const CompanyProfile = (props: Props) => {
   const ticker = useOutletContext<string>();
   const [companyData, setCompanyData] = useState<CompanyKeyMetrics>();
+  
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     const getCompanyKeyRatios = async () => {
+      setErrorMsg(null); 
+      
       const value = await getKeyMetrics(ticker);
       
-      if (value && typeof value !== "string" && value.data && value.data.length > 0) {
+      if (typeof value === "string") {
+        if (value.includes("402")) {
+           setErrorMsg("Ці дані доступні лише в Premium-тарифі API. Спробуйте великі компанії (наприклад, AAPL, MSFT).");
+        } else {
+           setErrorMsg(value);
+        }
+      } else if (value && value.data && value.data.length > 0) {
         setCompanyData(value.data[0]);
+      } else {
+        setErrorMsg("Немає даних для цієї компанії.");
       }
     };
     
@@ -83,7 +100,12 @@ const CompanyProfile = (props: Props) => {
           <p className="text-slate-500 text-sm mt-1">Key financial metrics, valuation ratios, and profitability indicators.</p>
       </div>
 
-      {companyData ? (
+      {errorMsg ? (
+        <div className="p-4 bg-orange-50 border-l-4 border-orange-500 text-orange-700 rounded-r-xl shadow-sm">
+          <p className="font-bold">API Access Limited</p>
+          <p>{errorMsg}</p>
+        </div>
+      ) : companyData ? (
         <RatioList config={tableConfig} data={companyData} />
       ) : (
         <Spinner />

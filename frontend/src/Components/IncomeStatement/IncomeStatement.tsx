@@ -62,6 +62,10 @@ const configs = [
     render: (company: CompanyIncomeStatement) => 
       company.revenue ? `${((company.incomeBeforeTax / company.revenue) * 100).toFixed(2)}%` : "0%",
   },
+  {
+    label: "Gross Profit",
+    render: (company: CompanyIncomeStatement) => `$${company.grossProfit?.toLocaleString() || 0}`,
+  },
 ];
 
 interface Props {}

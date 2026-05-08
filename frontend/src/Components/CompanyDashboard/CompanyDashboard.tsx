@@ -1,6 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Tile from '../Tile/Tile'
+import CompFinder from '../CompFinder/CompFinder';
 
 type Props = {
     children: React.ReactNode;
@@ -40,6 +41,7 @@ const CompanyDashboard = ({children, ticker, companyData}: Props) => {
                         <p className="text-slate-600 text-sm md:text-base leading-relaxed text-justify">
                             {companyData.description || "Description not available."}
                         </p>
+                        <CompFinder ticker={ticker} />
                     </div>
                 </>
             )}

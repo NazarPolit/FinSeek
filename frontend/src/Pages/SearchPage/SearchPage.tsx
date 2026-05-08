@@ -1,4 +1,4 @@
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react'
+import React, { ChangeEvent, SyntheticEvent, useState, useEffect } from 'react'
 import Navbar from '../../Components/Navbar/Navbar'
 import Hero from '../../Components/Hero/Hero'
 import Search from '../../Components/Search/Search'
@@ -7,6 +7,8 @@ import ListPortfolio from '../../Components/Portfolio/ListPortfolio/ListPortfoli
 import CardList from '../../Components/CardList/CardList'
 import { CompanySearch } from '../../company'
 
+import { useDebounce } from '../../Helpers/useDebounce' 
+
 interface Props {}
 
 const SearchPage = (props: Props) => {
@@ -14,6 +16,29 @@ const SearchPage = (props: Props) => {
   const [portfolioValues, setPortfolioValues] = useState<string[]>([]);
   const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  const debouncedSearch = useDebounce(search, 500);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (debouncedSearch.trim() === "") {
+        setSearchResult([]);
+        setServerError(null);
+        return;
+      }
+
+      const result = await searchCompanies(debouncedSearch);
+      
+      if (typeof result === "string") {
+        setServerError(result);
+      } else if (result && Array.isArray(result.data)) {
+        setSearchResult(result.data);
+        setServerError(null);
+      }
+    };
+
+    fetchResults();
+  }, [debouncedSearch]);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -35,14 +60,8 @@ const SearchPage = (props: Props) => {
     setPortfolioValues(removed);
   }
   
-  const onSearchSubmit = async (e: SyntheticEvent) => {
+  const onSearchSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-      const result = await searchCompanies(search);
-      if(typeof result === "string"){
-        setServerError(result);
-      } else if (Array.isArray(result.data)){
-        setSearchResult(result.data);
-      }
   };
 
   return (
