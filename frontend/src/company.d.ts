@@ -118,7 +118,7 @@ export interface CompanyIncomeStatement {
   revenue: number;
   costOfRevenue: number;
   grossProfit: number;
-  grossProfitRatio?: number; // Зробили опціональним
+  grossProfitRatio?: number;
   researchAndDevelopmentExpenses: number;
   generalAndAdministrativeExpenses: number;
   sellingAndMarketingExpenses: number;
@@ -228,14 +228,14 @@ export interface CompanyCashFlow {
   acquisitionsNet: number;
   purchasesOfInvestments: number;
   salesMaturitiesOfInvestments: number;
-  otherInvestingActivites: number;
-  netCashUsedForInvestingActivites: number;
+  otherInvestingActivities: number; 
+  netCashProvidedByInvestingActivities: number; 
   debtRepayment: number;
   commonStockIssued: number;
   commonStockRepurchased: number;
   dividendsPaid: number;
-  otherFinancingActivites: number;
-  netCashUsedProvidedByFinancingActivities: number;
+  otherFinancingActivities: number; 
+  netCashProvidedByFinancingActivities: number; 
   effectOfForexChangesOnCash: number;
   netChangeInCash: number;
   cashAtEndOfPeriod: number;

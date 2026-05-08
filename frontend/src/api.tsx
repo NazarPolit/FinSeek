@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CompanyIncomeStatement, CompanyKeyMetrics, CompanyProfile, CompanySearch } from "./company"
+import { CompanyBalanceSheet, CompanyCashFlow, CompanyIncomeStatement, CompanyKeyMetrics, CompanyProfile, CompanySearch } from "./company"
 
 interface SearchResponse{
     data: CompanySearch[];
@@ -80,3 +80,33 @@ export const getIncomeStatement = async (
     throw new Error(error.message);
   }
 };
+
+export const getBalanceSheet = async (query: string) => {
+    try{
+        const data = await axios.get<CompanyBalanceSheet[]>(
+            `https://financialmodelingprep.com/stable/balance-sheet-statement?symbol=${query}&apikey=${process.env.REACT_APP_API_KEY}`  
+        )
+        return data;
+    } catch (error: any) {
+        if (error.response?.status === 429) {
+             console.warn("API Rate Limit Exceeded!");
+             return "API limit reached.";
+        }
+        console.log("error message from API: ", error.message);
+    }
+}
+
+export const getCashFlow = async (query: string) => {
+    try{
+        const data = await axios.get<CompanyCashFlow[]>(
+            `https://financialmodelingprep.com/stable/cash-flow-statement?symbol=${query}&apikey=${process.env.REACT_APP_API_KEY}`
+        )
+        return data;
+    } catch (error: any) {
+        if (error.response?.status === 429) {
+             console.warn("API Rate Limit Exceeded!");
+             return "API limit reached.";
+        }
+        console.log("error message from API: ", error.message);
+    }
+}

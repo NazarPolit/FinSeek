@@ -22,15 +22,15 @@ const CardPortfolio = ({portfolioValue, onPortfolioDelete}: Props) => {
         />
       </div>
 
-      {/* Основна інформація */}
       <div className="flex-1">
         <p className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Ticker</p>
-        <Link to={`/company/${portfolioValue}`} className="text-3xl font-extrabold text-textMain tracking-tight hover:text-brandBlue transition-colors">
+        <Link 
+          to={`/company/${portfolioValue}/company-profile`}
+          className="text-3xl font-extrabold text-textMain tracking-tight hover:text-brandBlue transition-colors">
           {portfolioValue}
         </Link>
       </div>
 
-      {/* Нижня частина з посиланням (деталізація) */}
       <div className="mt-6 pt-4 border-t border-slate-100">
         <Link to={`/company/${portfolioValue}`} className="flex items-center text-sm font-semibold text-brandBlue hover:text-brandBlueHover transition-colors">
           View Analytics
