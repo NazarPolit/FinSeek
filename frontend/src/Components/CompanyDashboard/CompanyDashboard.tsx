@@ -2,6 +2,7 @@ import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Tile from '../Tile/Tile'
 import CompFinder from '../CompFinder/CompFinder';
+import TenKFinder from '../AnalystEstimates/AnalystEstimates';
 
 type Props = {
     children: React.ReactNode;
@@ -42,6 +43,7 @@ const CompanyDashboard = ({children, ticker, companyData}: Props) => {
                             {companyData.description || "Description not available."}
                         </p>
                         <CompFinder ticker={ticker} />
+                        <TenKFinder ticker={ticker} />
                     </div>
                 </>
             )}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CompanyBalanceSheet, CompanyCashFlow, CompanyCompData, CompanyIncomeStatement, CompanyKeyMetrics, CompanyProfile, CompanySearch } from "./company"
+import { CompanyBalanceSheet, CompanyCashFlow, CompanyCompData, CompanyEstimates, CompanyIncomeStatement, CompanyKeyMetrics, CompanyProfile, CompanySearch} from "./company"
 
 interface SearchResponse{
     data: CompanySearch[];
@@ -122,6 +122,20 @@ export const getCompData = async (query: string) => {
   } catch (error: any) {
     if (error.response?.status === 402) {
       return "Error 402: Payment Required";
+    }
+    return error.message;
+  }
+};
+
+export const getEstimates = async (query: string) => {
+  try {
+    const data = await axios.get<CompanyEstimates[]>(
+      `https://financialmodelingprep.com/stable/analyst-estimates?symbol=${query}&period=annual&apikey=${process.env.REACT_APP_API_KEY}`
+    );
+    return data;
+  } catch (error: any) {
+    if (error.response?.status === 402) {
+      return "402: Прогнози доступні лише у Premium-плані.";
     }
     return error.message;
   }
