@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import StockCommentForm from "./StockCommentForm/StockCommentForm";
-import { commentPostAPI } from "../../Services/CommentService";
+import { commentGetAPI, commentPostAPI } from "../../Services/CommentService";
 import { toast } from "react-toastify";
+import { CommentGet } from "../../Models/Comment";
+import Spinner from "../Spinners/Spinners"; 
+import StockCommentList from "../StockCommentList/StockCommentList";
 
 type Props = {
   stockSymbol: string;
@@ -13,11 +16,38 @@ type CommentFormInputs = {
 };
 
 const StockComment = ({ stockSymbol }: Props) => {
+  const [comments, setComments] = useState<CommentGet[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    getComments();
+  }, []);
+
+  const getComments = () => {
+    setLoading(true);
+    commentGetAPI(stockSymbol).then((res) => {
+      setLoading(false);
+      
+      const responseData = res?.data;
+      
+      if (Array.isArray(responseData)) {
+        setComments(responseData);
+      } 
+      else if (responseData && Array.isArray(responseData.comments)) {
+        setComments(responseData.comments);
+      } 
+      else {
+        setComments([]);
+      }
+    });
+  };
+
   const handleComment = (e: CommentFormInputs) => {
     commentPostAPI(e.title, e.content, stockSymbol)
       .then((res) => {
         if (res) {
           toast.success("Note saved successfully!");
+          getComments(); 
         }
       })
       .catch((err) => {
@@ -26,7 +56,9 @@ const StockComment = ({ stockSymbol }: Props) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full mt-6">
+      {loading ? <Spinner /> : <StockCommentList comments={comments || []} />}
+      
       <StockCommentForm symbol={stockSymbol} handleComment={handleComment} />
     </div>
   );

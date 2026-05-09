@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom"; // <-- Додай Navigate в імпорт
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "../App";
 import HomePage from "../Pages/HomePage/HomePage";
 import SearchPage from "../Pages/SearchPage/SearchPage";
