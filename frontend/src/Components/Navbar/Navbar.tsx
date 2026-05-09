@@ -17,10 +17,15 @@ const Navbar = (props: Props) => {
              <img src={logo} alt="FinSeek Logo" className="h-10" />
           </Link>
           <div className="hidden lg:flex space-x-8 font-semibold">
-            <Link to="/search" className="text-textMuted hover:text-brandGreen transition-colors duration-200">
+            <Link to="/search" className="text-slate-500 hover:text-brandBlue transition-colors duration-200">
               Search
             </Link>
-            <a href="#" className="text-textMuted hover:text-brandGreen transition-colors duration-200">
+            {isLoggedIn() && (
+              <Link to="/portfolio" className="text-slate-500 hover:text-brandBlue transition-colors duration-200">
+                Portfolio
+              </Link>
+            )}
+            <a href="#" className="text-slate-500 hover:text-brandBlue transition-colors duration-200">
               Markets
             </a>
           </div>
