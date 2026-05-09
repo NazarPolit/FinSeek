@@ -1,8 +1,7 @@
-import axios from "axios";
 import { toast } from "react-toastify";
 
 export const handleError = (error: any) => {
-  if (axios.isAxiosError(error)) {
+  if (error?.isAxiosError) {
     var err = error.response;
 
     if (Array.isArray(err?.data)) {
@@ -22,5 +21,7 @@ export const handleError = (error: any) => {
     else if (err?.data) {
       toast.warning(err.data);
     }
+  } else if (error?.message) {
+    toast.warning(error.message);
   }
 };
