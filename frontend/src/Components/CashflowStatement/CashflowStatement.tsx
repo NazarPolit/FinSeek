@@ -35,7 +35,7 @@ const config = [
   },
   {
     label: "Issuance Of Stock",
-    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.commonStockIssued),
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.commonStockIssuance),
   },
   {
     label: "Free Cash Flow",

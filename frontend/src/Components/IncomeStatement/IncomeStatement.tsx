@@ -37,7 +37,9 @@ const configs = [
   },
   {
     label: "Net Income Ratio",
-    render: (company: CompanyIncomeStatement) => formatRatio(company.netIncomeRatio),
+    // ВИПРАВЛЕНО: Рахуємо самостійно (Net Income / Revenue)
+    render: (company: CompanyIncomeStatement) => 
+      company.revenue ? formatRatio(company.netIncome / company.revenue) : "N/A",
   },
   {
     label: "Earnings Per Share",
@@ -49,15 +51,21 @@ const configs = [
   },
   {
     label: "Gross Profit Ratio",
-    render: (company: CompanyIncomeStatement) => formatRatio(company.grossProfitRatio),
+    // ВИПРАВЛЕНО: Рахуємо самостійно (Gross Profit / Revenue)
+    render: (company: CompanyIncomeStatement) => 
+      company.revenue ? formatRatio(company.grossProfit / company.revenue) : "N/A",
   },
   {
     label: "Operating Income Ratio",
-    render: (company: CompanyIncomeStatement) => formatRatio(company.operatingIncomeRatio),
+    // ВИПРАВЛЕНО: Рахуємо самостійно (Operating Income / Revenue)
+    render: (company: CompanyIncomeStatement) => 
+      company.revenue ? formatRatio(company.operatingIncome / company.revenue) : "N/A",
   },
   {
     label: "Income Before Taxes Ratio",
-    render: (company: CompanyIncomeStatement) => formatRatio(company.incomeBeforeTaxRatio),
+    // ВИПРАВЛЕНО: Рахуємо самостійно (Income Before Tax / Revenue)
+    render: (company: CompanyIncomeStatement) => 
+      company.revenue ? formatRatio(company.incomeBeforeTax / company.revenue) : "N/A",
   },
 ];
 
@@ -71,7 +79,10 @@ const IncomeStatement = (props: Props) => {
     const incomeStatementFetch = async () => {
       try {
         const result = await getIncomeStatement(ticker);
-        setIncomeStatement(result);
+        // ВИПРАВЛЕНО: Перевіряємо, чи є result масивом, і не використовуємо .data
+        if (Array.isArray(result) && result.length > 0) {
+          setIncomeStatement(result);
+        }
       } catch (error) {
         console.log(error);
       }

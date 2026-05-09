@@ -24,12 +24,13 @@ const CompanyDashboard = ({children, ticker, companyData}: Props) => {
 
         <div className="relative z-10 px-6 md:px-10 mx-auto max-w-7xl w-full -mt-20"> 
             
-            {companyData && (
+           {companyData && (
                 <>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                         <Tile title="Symbol" subTitle={ticker} />
                         <Tile title="Price" subTitle={companyData.price ? `$${companyData.price.toFixed(2)}` : "N/A"} />
-                        <Tile title="DCF" subTitle={companyData.dcf ? `$${companyData.dcf.toFixed(2)}` : "N/A"} />
+                                                <Tile title="Industry" subTitle={companyData.industry || "N/A"} />
+                        
                         <Tile title="Sector" subTitle={companyData.sector || "N/A"} />
                     </div>
                 </>

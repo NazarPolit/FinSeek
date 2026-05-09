@@ -231,7 +231,7 @@ export interface CompanyCashFlow {
   otherInvestingActivities: number; 
   netCashProvidedByInvestingActivities: number; 
   debtRepayment: number;
-  commonStockIssued: number;
+  commonStockIssuance: number;
   commonStockRepurchased: number;
   dividendsPaid: number;
   otherFinancingActivities: number; 
