@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom"; // <-- Додай Navigate в імпорт
 import App from "../App";
 import HomePage from "../Pages/HomePage/HomePage";
 import SearchPage from "../Pages/SearchPage/SearchPage";
@@ -40,6 +40,8 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         children: [
+          { index: true, element: <Navigate to="company-profile" replace /> },
+          
           { path: "company-profile", element: <CompanyProfile /> },
           { path: "income-statement", element: <IncomeStatement /> },
           { path: "balance-sheet", element: <BalanceSheet /> },

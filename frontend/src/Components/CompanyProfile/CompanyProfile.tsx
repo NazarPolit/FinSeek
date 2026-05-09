@@ -7,6 +7,7 @@ import Spinner from '../Spinners/Spinners';
 import CompFinder from '../CompFinder/CompFinder';
 import AnalystEstimates from '../AnalystEstimates/AnalystEstimates';
 import { formatLargeNonMonetaryNumber, formatRatio } from '../../Helpers/NumberFormatting.tsx';
+import StockComment from '../StockComment/StockComment';
 
 interface Props {}
 
@@ -136,9 +137,13 @@ const CompanyProfile = (props: Props) => {
           <p>{errorMsg}</p>
         </div>
       ) : companyMetrics ? (
-        <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-100">
-          <h3 className="text-lg font-bold text-slate-800 mb-4">Key Metrics Overview</h3>
-          <RatioList config={tableConfig} data={companyMetrics} />
+        <div className="flex flex-col gap-6">
+          <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-100">
+            <h3 className="text-lg font-bold text-slate-800 mb-4">Key Metrics Overview</h3>
+            <RatioList config={tableConfig} data={companyMetrics} />
+          </div>
+          
+          <StockComment stockSymbol={ticker} />
         </div>
       ) : null}
 
