@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { CompanyKeyMetrics } from '../../company';
-import RatioList from '../RatioList/RatioList';
+import React, { useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { getKeyMetrics } from '../../api';
+import { CompanyKeyMetrics, CompanyProfile as CompanyProfileType } from '../../company';
+import { getKeyMetrics, getCompanyProfile } from '../../api';
+import RatioList from '../RatioList/RatioList';
 import Spinner from '../Spinners/Spinners';
+import CompFinder from '../CompFinder/CompFinder';
+import AnalystEstimates from '../AnalystEstimates/AnalystEstimates';
 import { formatLargeNonMonetaryNumber, formatRatio } from '../../Helpers/NumberFormatting.tsx';
 
 interface Props {}
@@ -63,37 +65,69 @@ const tableConfig = [
 
 const CompanyProfile = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [companyData, setCompanyData] = useState<CompanyKeyMetrics>();
-  
+  const [companyMetrics, setCompanyMetrics] = useState<CompanyKeyMetrics>();
+  const [companyProfile, setCompanyProfile] = useState<CompanyProfileType>();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getCompanyKeyRatios = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       setErrorMsg(null); 
       
-      const value = await getKeyMetrics(ticker);
+      const metricsValue = await getKeyMetrics(ticker);
+      const profileValue = await getCompanyProfile(ticker);
       
-      if (typeof value === "string") {
-        if (value.includes("402")) {
+      if (typeof profileValue !== "string" && profileValue?.data && profileValue.data.length > 0) {
+        setCompanyProfile(profileValue.data[0]);
+      }
+
+      if (typeof metricsValue === "string") {
+        if (metricsValue.includes("402") || metricsValue.includes("403")) {
            setErrorMsg("Ці дані доступні лише в Premium-тарифі API. Спробуйте великі компанії (наприклад, AAPL, MSFT).");
         } else {
-           setErrorMsg(value);
+           setErrorMsg(metricsValue);
         }
-      } else if (value && value.data && value.data.length > 0) {
-        setCompanyData(value.data[0]);
+      } else if (metricsValue && metricsValue.data && metricsValue.data.length > 0) {
+        setCompanyMetrics(metricsValue.data[0]);
       } else {
         setErrorMsg("Немає даних для цієї компанії.");
       }
+
+      setIsLoading(false);
     };
     
-    getCompanyKeyRatios();
+    fetchData();
   }, [ticker]);
 
+  if (isLoading) return <Spinner />;
+
   return (
-    <div className="w-full flex flex-col">
-      <div className="mb-6">
+    <div className="w-full flex flex-col gap-6">
+      
+      <div>
           <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">Company Profile</h2>
-          <p className="text-slate-500 text-sm mt-1">Key financial metrics, valuation ratios, and profitability indicators.</p>
+          <p className="text-slate-500 text-sm mt-1">Overview, peer comparison, and key financial metrics.</p>
+      </div>
+
+      {companyProfile?.description && (
+        <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-100">
+          <h3 className="text-lg font-bold text-slate-800 mb-3">About {companyProfile.companyName}</h3>
+          <p className="text-slate-600 text-sm leading-relaxed text-justify">
+            {companyProfile.description}
+          </p>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-100">
+            <h3 className="text-lg font-bold text-slate-800 mb-4">Compare with Peers</h3>
+            <CompFinder ticker={ticker} />
+          </div>
+
+          <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-100">
+            <AnalystEstimates ticker={ticker} />
+          </div>
       </div>
 
       {errorMsg ? (
@@ -101,11 +135,13 @@ const CompanyProfile = (props: Props) => {
           <p className="font-bold">API Access Limited</p>
           <p>{errorMsg}</p>
         </div>
-      ) : companyData ? (
-        <RatioList config={tableConfig} data={companyData} />
-      ) : (
-        <Spinner />
-      )}
+      ) : companyMetrics ? (
+        <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-100">
+          <h3 className="text-lg font-bold text-slate-800 mb-4">Key Metrics Overview</h3>
+          <RatioList config={tableConfig} data={companyMetrics} />
+        </div>
+      ) : null}
+
     </div>
   );
 };

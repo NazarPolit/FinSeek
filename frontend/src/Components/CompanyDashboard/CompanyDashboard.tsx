@@ -1,8 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Tile from '../Tile/Tile'
-import CompFinder from '../CompFinder/CompFinder';
-import TenKFinder from '../AnalystEstimates/AnalystEstimates';
 
 type Props = {
     children: React.ReactNode;
@@ -33,17 +31,6 @@ const CompanyDashboard = ({children, ticker, companyData}: Props) => {
                         <Tile title="Price" subTitle={companyData.price ? `$${companyData.price.toFixed(2)}` : "N/A"} />
                         <Tile title="DCF" subTitle={companyData.dcf ? `$${companyData.dcf.toFixed(2)}` : "N/A"} />
                         <Tile title="Sector" subTitle={companyData.sector || "N/A"} />
-                    </div>
-
-                    <div className="bg-white shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-6 md:p-8 mb-8 border border-slate-100">
-                        <h3 className="text-xl font-extrabold text-slate-900 mb-4 tracking-tight">
-                            About {companyData.companyName}
-                        </h3>
-                        <p className="text-slate-600 text-sm md:text-base leading-relaxed text-justify">
-                            {companyData.description || "Description not available."}
-                        </p>
-                        <CompFinder ticker={ticker} />
-                        <TenKFinder ticker={ticker} />
                     </div>
                 </>
             )}
