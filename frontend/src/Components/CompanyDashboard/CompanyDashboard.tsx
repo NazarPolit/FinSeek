@@ -31,8 +31,8 @@ const CompanyDashboard = ({children, ticker, companyData}: Props) => {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                         <Tile title="Symbol" subTitle={ticker} />
                         <Tile title="Price" subTitle={companyData.price ? `$${companyData.price.toFixed(2)}` : "N/A"} />
+                        <Tile title="DCF" subTitle={companyData.dcf ? `$${companyData.dcf.toFixed(2)}` : "N/A"} />
                         <Tile title="Sector" subTitle={companyData.sector || "N/A"} />
-                        <Tile title="Industry" subTitle={companyData.industry || "N/A"} />
                     </div>
 
                     <div className="bg-white shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl p-6 md:p-8 mb-8 border border-slate-100">

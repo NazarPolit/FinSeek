@@ -4,59 +4,58 @@ import { useOutletContext } from "react-router-dom";
 import RatioList from "../RatioList/RatioList";
 import { getBalanceSheet } from "../../api";
 import Spinner from "../Spinners/Spinners";
+import { formatLargeMonetaryNumber } from "../../Helpers/NumberFormatting.tsx";
 
 type Props = {};
 
 const config = [
   {
-    label: "Total Assets",
-    render: (company: CompanyBalanceSheet) => `$${company.totalAssets?.toLocaleString() || 0}`,
-    subTitle: "Total amount of assets owned by the company",
+    label: <div className="font-bold">Total Assets</div>,
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.totalAssets),
   },
   {
     label: "Current Assets",
-    render: (company: CompanyBalanceSheet) => `$${company.totalCurrentAssets?.toLocaleString() || 0}`,
-    subTitle: "Assets that can be converted to cash within one year",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.totalCurrentAssets),
   },
   {
     label: "Total Cash",
-    render: (company: CompanyBalanceSheet) => `$${company.cashAndCashEquivalents?.toLocaleString() || 0}`,
-    subTitle: "Cash and short-term liquid investments",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.cashAndCashEquivalents),
   },
   {
-    label: "Property & Equipment",
-    render: (company: CompanyBalanceSheet) => `$${company.propertyPlantEquipmentNet?.toLocaleString() || 0}`,
-    subTitle: "Physical assets like buildings, machinery, and land",
+    label: "Property & equipment",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.propertyPlantEquipmentNet),
   },
   {
     label: "Intangible Assets",
-    render: (company: CompanyBalanceSheet) => `$${company.intangibleAssets?.toLocaleString() || 0}`,
-    subTitle: "Non-physical assets like patents, trademarks, and goodwill",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.intangibleAssets),
   },
   {
-    label: "Total Liabilities",
-    render: (company: CompanyBalanceSheet) => `$${company.totalLiabilities?.toLocaleString() || 0}`,
-    subTitle: "Total amount of debt and financial obligations",
+    label: "Long Term Debt",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.longTermDebt),
+  },
+  {
+    label: "Total Debt",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.totalDebt),
+  },
+  {
+    label: <div className="font-bold">Total Liabilities</div>,
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.totalLiabilities),
   },
   {
     label: "Current Liabilities",
-    render: (company: CompanyBalanceSheet) => `$${company.totalCurrentLiabilities?.toLocaleString() || 0}`,
-    subTitle: "Debts and obligations due within one year",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.totalCurrentLiabilities),
   },
   {
-    label: "Long-Term Debt",
-    render: (company: CompanyBalanceSheet) => `$${company.longTermDebt?.toLocaleString() || 0}`,
-    subTitle: "Loans and financial obligations lasting over one year",
+    label: "Long-Term Income Taxes",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.otherLiabilities),
   },
   {
     label: "Stakeholder's Equity",
-    render: (company: CompanyBalanceSheet) => `$${company.totalStockholdersEquity?.toLocaleString() || 0}`,
-    subTitle: "Net worth of the company (Total Assets - Total Liabilities)",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.totalStockholdersEquity),
   },
   {
     label: "Retained Earnings",
-    render: (company: CompanyBalanceSheet) => `$${company.retainedEarnings?.toLocaleString() || 0}`,
-    subTitle: "Accumulated net income retained for reinvestment",
+    render: (company: CompanyBalanceSheet) => formatLargeMonetaryNumber(company.retainedEarnings),
   },
 ];
 

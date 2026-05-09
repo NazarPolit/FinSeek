@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 import { getIncomeStatement } from '../../api';
 import Table from '../Table/Table';
 import Spinner from '../Spinners/Spinners';
+import { formatLargeMonetaryNumber, formatRatio } from '../../Helpers/NumberFormatting.tsx';
 
 const configs = [
   {
@@ -12,59 +13,51 @@ const configs = [
   },
   {
     label: "Revenue",
-    render: (company: CompanyIncomeStatement) => `$${company.revenue?.toLocaleString() || 0}`,
+    render: (company: CompanyIncomeStatement) => formatLargeMonetaryNumber(company.revenue),
   },
   {
     label: "Cost Of Revenue",
-    render: (company: CompanyIncomeStatement) => `$${company.costOfRevenue?.toLocaleString() || 0}`,
+    render: (company: CompanyIncomeStatement) => formatLargeMonetaryNumber(company.costOfRevenue),
   },
   {
     label: "Depreciation",
-    render: (company: CompanyIncomeStatement) => `$${company.depreciationAndAmortization?.toLocaleString() || 0}`,
+    render: (company: CompanyIncomeStatement) => formatLargeMonetaryNumber(company.depreciationAndAmortization),
   },
   {
     label: "Operating Income",
-    render: (company: CompanyIncomeStatement) => `$${company.operatingIncome?.toLocaleString() || 0}`,
+    render: (company: CompanyIncomeStatement) => formatLargeMonetaryNumber(company.operatingIncome),
   },
   {
     label: "Income Before Taxes",
-    render: (company: CompanyIncomeStatement) => `$${company.incomeBeforeTax?.toLocaleString() || 0}`,
+    render: (company: CompanyIncomeStatement) => formatLargeMonetaryNumber(company.incomeBeforeTax),
   },
   {
     label: "Net Income",
-    render: (company: CompanyIncomeStatement) => `$${company.netIncome?.toLocaleString() || 0}`,
+    render: (company: CompanyIncomeStatement) => formatLargeMonetaryNumber(company.netIncome),
   },
   {
     label: "Net Income Ratio",
-    render: (company: CompanyIncomeStatement) => 
-      company.revenue ? `${((company.netIncome / company.revenue) * 100).toFixed(2)}%` : "0%",
+    render: (company: CompanyIncomeStatement) => formatRatio(company.netIncomeRatio),
   },
   {
     label: "Earnings Per Share",
-    render: (company: CompanyIncomeStatement) => `$${company.eps?.toFixed(2)}`,
+    render: (company: CompanyIncomeStatement) => formatRatio(company.eps),
   },
   {
     label: "Earnings Per Diluted",
-    render: (company: CompanyIncomeStatement) => `$${company.epsDiluted?.toFixed(2)}`,
+    render: (company: CompanyIncomeStatement) => formatRatio(company.epsDiluted),
   },
   {
     label: "Gross Profit Ratio",
-    render: (company: CompanyIncomeStatement) => 
-      company.revenue ? `${((company.grossProfit / company.revenue) * 100).toFixed(2)}%` : "0%",
+    render: (company: CompanyIncomeStatement) => formatRatio(company.grossProfitRatio),
   },
   {
     label: "Operating Income Ratio",
-    render: (company: CompanyIncomeStatement) => 
-      company.revenue ? `${((company.operatingIncome / company.revenue) * 100).toFixed(2)}%` : "0%",
+    render: (company: CompanyIncomeStatement) => formatRatio(company.operatingIncomeRatio),
   },
   {
     label: "Income Before Taxes Ratio",
-    render: (company: CompanyIncomeStatement) => 
-      company.revenue ? `${((company.incomeBeforeTax / company.revenue) * 100).toFixed(2)}%` : "0%",
-  },
-  {
-    label: "Gross Profit",
-    render: (company: CompanyIncomeStatement) => `$${company.grossProfit?.toLocaleString() || 0}`,
+    render: (company: CompanyIncomeStatement) => formatRatio(company.incomeBeforeTaxRatio),
   },
 ];
 

@@ -4,64 +4,60 @@ import RatioList from '../RatioList/RatioList';
 import { useOutletContext } from 'react-router-dom';
 import { getKeyMetrics } from '../../api';
 import Spinner from '../Spinners/Spinners';
+import { formatLargeNonMonetaryNumber, formatRatio } from '../../Helpers/NumberFormatting.tsx';
 
 interface Props {}
 
 const tableConfig = [
   {
     label: "Market Cap",
-    render: (company: CompanyKeyMetrics) => `$${(company.marketCap / 1e9).toFixed(2)}B`,
+    render: (company: CompanyKeyMetrics) => formatLargeNonMonetaryNumber(company.marketCap),
     subTitle: "Total value of all a company's shares of stock",
   },
   {
     label: "Enterprise Value",
-    render: (company: CompanyKeyMetrics) => `$${(company.enterpriseValueTTM / 1e9).toFixed(2)}B`,
-    subTitle: "Total value of a company, including debt and minus cash",
-  },
-  {
-    label: "EV to EBITDA",
-    render: (company: CompanyKeyMetrics) => company.evToEBITDATTM?.toFixed(2),
-    subTitle: "Valuation multiple comparing enterprise value to earnings",
-  },
-  {
-    label: "EV to Sales",
-    render: (company: CompanyKeyMetrics) => company.evToSalesTTM?.toFixed(2),
-    subTitle: "Valuation metric comparing enterprise value to revenue",
+    render: (company: CompanyKeyMetrics) => formatLargeNonMonetaryNumber(company.enterpriseValueTTM),
+    subTitle: "Measure of a company's total value, including debt and excluding cash",
   },
   {
     label: "Current Ratio",
-    render: (company: CompanyKeyMetrics) => company.currentRatioTTM?.toFixed(2),
-    subTitle: "Measures a company's ability to pay short-term obligations",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.currentRatioTTM),
+    subTitle: "Measures the companies ability to pay short term debt obligations",
   },
   {
-    label: "Net Debt to EBITDA",
-    render: (company: CompanyKeyMetrics) => company.netDebtToEBITDATTM?.toFixed(2),
-    subTitle: "Measurement of leverage",
+    label: "Return On Equity",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.returnOnEquityTTM),
+    subTitle: "Return on equity is the measure of a company's net income divided by its shareholder's equity",
   },
   {
-    label: "Return On Equity (ROE)",
-    render: (company: CompanyKeyMetrics) => `${(company.returnOnEquityTTM * 100).toFixed(2)}%`,
-    subTitle: "Profitability relative to shareholders' equity",
+    label: "Return On Assets",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.returnOnTangibleAssetsTTM),
+    subTitle: "Return on assets is the measure of how effective a company is using its assets",
   },
   {
-    label: "Return On Assets (ROA)",
-    render: (company: CompanyKeyMetrics) => `${(company.returnOnAssetsTTM * 100).toFixed(2)}%`,
-    subTitle: "Profitability relative to total assets",
+    label: "Free Cash Flow Yield",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.freeCashFlowYieldTTM),
+    subTitle: "Compares the free cash flow a company earns against its market value",
   },
   {
     label: "Earnings Yield",
-    render: (company: CompanyKeyMetrics) => `${(company.earningsYieldTTM * 100).toFixed(2)}%`,
-    subTitle: "Earnings per share divided by the share price",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.earningsYieldTTM),
+    subTitle: "Earnings per share divided by the current market price per share",
   },
   {
-    label: "Cash Conversion Cycle",
-    render: (company: CompanyKeyMetrics) => `${company.cashConversionCycleTTM?.toFixed(0)} days`,
-    subTitle: "Days to convert inventory investments into cash flows",
+    label: "EV to EBITDA",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.evToEBITDATTM),
+    subTitle: "Compares a company's Enterprise Value (EV) to its EBITDA",
   },
- {
-    label: "Free Cash Flow Yield",
-    render: (company: CompanyKeyMetrics) => company.freeCashFlowYieldTTM ? `${(company.freeCashFlowYieldTTM * 100).toFixed(2)}%` : "N/A",
-    subTitle: "Free cash flow normalized by market value (higher is better)",
+  {
+    label: "Capex To Revenue",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.capexToRevenueTTM),
+    subTitle: "Shows the portion of revenue being reinvested into physical assets",
+  },
+  {
+    label: "Graham Number",
+    render: (company: CompanyKeyMetrics) => formatRatio(company.grahamNumberTTM),
+    subTitle: "The upper bound of the price range that a defensive investor should pay for a stock",
   },
 ];
 

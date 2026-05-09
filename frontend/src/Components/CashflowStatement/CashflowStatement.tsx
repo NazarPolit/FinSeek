@@ -4,6 +4,7 @@ import { CompanyCashFlow } from "../../company";
 import { getCashFlow } from "../../api";
 import Table from "../Table/Table";
 import Spinner from "../Spinners/Spinners";
+import { formatLargeMonetaryNumber } from "../../Helpers/NumberFormatting.tsx";
 
 type Props = {};
 
@@ -14,31 +15,31 @@ const config = [
   },
   {
     label: "Operating Cashflow",
-    render: (company: CompanyCashFlow) => `$${company.operatingCashFlow?.toLocaleString() || 0}`,
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.operatingCashFlow),
   },
   {
     label: "Investing Cashflow",
-    render: (company: CompanyCashFlow) => `$${company.netCashProvidedByInvestingActivities?.toLocaleString() || 0}`,
-  },
-  {
-    label: "Property/Machinery Cashflow",
-    render: (company: CompanyCashFlow) => `$${company.investmentsInPropertyPlantAndEquipment?.toLocaleString() || 0}`,
-  },
-  {
-    label: "Other Investing Cashflow",
-    render: (company: CompanyCashFlow) => `$${company.otherInvestingActivities?.toLocaleString() || 0}`,
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.netCashProvidedByInvestingActivities),
   },
   {
     label: "Financing Cashflow",
-    render: (company: CompanyCashFlow) => `$${company.netCashProvidedByFinancingActivities?.toLocaleString() || 0}`,
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.netCashProvidedByFinancingActivities),
   },
   {
-    label: "CapEX (Capital Expenditure)",
-    render: (company: CompanyCashFlow) => `$${company.capitalExpenditure?.toLocaleString() || 0}`,
+    label: "Cash At End of Period",
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.cashAtEndOfPeriod),
+  },
+  {
+    label: "CapEX",
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.capitalExpenditure),
+  },
+  {
+    label: "Issuance Of Stock",
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.commonStockIssued),
   },
   {
     label: "Free Cash Flow",
-    render: (company: CompanyCashFlow) => `$${company.freeCashFlow?.toLocaleString() || 0}`,
+    render: (company: CompanyCashFlow) => formatLargeMonetaryNumber(company.freeCashFlow),
   },
 ];
 
