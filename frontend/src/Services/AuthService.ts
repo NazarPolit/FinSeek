@@ -31,3 +31,18 @@ export const registerAPI = async (
     throw error;
   }
 };
+
+export const confirmEmailAPI = async (userId: string, token: string) => {
+  try {
+    const response = await axios.post(
+      api + `account/confirm-email?userId=${userId}&token=${encodeURIComponent(token)}`
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resendConfirmationAPI = async (email: string) => {
+  return await axios.post(api + `account/resend-confirmation?email=${encodeURIComponent(email)}`);
+};

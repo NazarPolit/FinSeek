@@ -43,21 +43,8 @@ export const UserProvider = ({ children }: Props) => {
   ) => {
     await registerAPI(email, username, password)
       .then((res) => {
-        if (res) {
-          localStorage.setItem("token", res?.data.token);
-          const userObj = {
-            userName: res?.data.userName,
-            email: res?.data.email,
-          };
-          localStorage.setItem("user", JSON.stringify(userObj));
-          setToken(res?.data.token!);
-          setUser(userObj!);
-          
-          axios.defaults.headers.common["Authorization"] = "Bearer " + res?.data.token;
-          
-          toast.success("Register Success!");
-          navigate("/search");
-        }
+        toast.success("Register Success! Please check your email to confirm your account.");
+        navigate("/login"); 
       })
       .catch((e: any) => {
           const errors = e?.response?.data;
@@ -79,21 +66,30 @@ export const UserProvider = ({ children }: Props) => {
       .then((res) => {
         if (res) {
           localStorage.setItem("token", res?.data.token);
-          const userObj = {
-            userName: res?.data.userName,
-            email: res?.data.email,
-          };
+          const userObj = { userName: res?.data.userName, email: res?.data.email };
           localStorage.setItem("user", JSON.stringify(userObj));
           setToken(res?.data.token!);
           setUser(userObj!);
-          
           axios.defaults.headers.common["Authorization"] = "Bearer " + res?.data.token;
-          
           toast.success("Login Success!");
           navigate("/search");
         }
       })
-      .catch((e) => toast.warning("Server error occured"));
+      .catch((e: any) => {
+        const errorData = e?.response?.data;
+        
+        if (typeof errorData === "string" && errorData.toLowerCase().includes("confirm your email")) {
+          toast.error("Please confirm your email before logging in.");
+        } 
+        else if (e?.response?.status === 401) {
+          toast.error("Invalid username or password");
+        } 
+        else {
+          toast.warning("Server error occurred. Please try again later.");
+        }
+        
+        throw e; 
+      });
   };
 
   const isLoggedIn = () => {

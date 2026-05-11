@@ -14,6 +14,7 @@ import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
 import PortfolioPage from "../Pages/PortfolioPage/PortfolioPage";
 import MarketsPage from "../Pages/MarketsPage/MarketsPage";
+import ConfirmEmailPage from "../Pages/ConfirmEmailPage/ConfirmEmailPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
+      { path: "confirm-email", element: <ConfirmEmailPage /> },
       { path: "design-guide", element: <DesignGuide /> },
       
       {

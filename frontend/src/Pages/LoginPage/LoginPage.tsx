@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuth } from "../../Context/useAuth";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-
-type Props = {};
+import { resendConfirmationAPI } from "../../Services/AuthService";
+import { toast } from "react-toastify";
 
 type LoginFormsInputs = {
   userName: string;
@@ -17,17 +17,41 @@ const validation = Yup.object().shape({
   password: Yup.string().required("Password is required"),
 });
 
-const LoginPage = (props: Props) => {
+const LoginPage = () => {
   const { loginUser } = useAuth();
-  
+  const [showResend, setShowResend] = useState(false);
+  const [emailForResend, setEmailForResend] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormsInputs>({ resolver: yupResolver(validation) });
-  
-  const handleLogin = (form: LoginFormsInputs) => {
-    loginUser(form.userName, form.password);
+
+  const handleLogin = async (form: LoginFormsInputs) => {
+    try {
+      setShowResend(false);
+      await loginUser(form.userName, form.password);
+    } catch (e: any) {
+      const errorData = e?.response?.data;
+      if (typeof errorData === "string" && errorData.toLowerCase().includes("confirm your email")) {
+        setShowResend(true);
+      }
+    }
+  };
+
+  const handleResend = async () => {
+    if (!emailForResend) {
+      toast.warning("Please enter your email to receive a new link");
+      return;
+    }
+    try {
+      await resendConfirmationAPI(emailForResend);
+      toast.info("A new confirmation link has been sent to your email.");
+      setShowResend(false);
+    } catch (e) {
+      toast.error("Could not resend link. Make sure the email is correct.");
+    }
   };
 
   return (
@@ -43,8 +67,32 @@ const LoginPage = (props: Props) => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm border border-slate-100 sm:rounded-xl sm:px-10">
+          
+          {showResend && (
+            <div className="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-lg animate-fadeIn">
+              <p className="text-sm text-indigo-800 mb-3 font-medium">
+                It seems your email is not confirmed.
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-3 py-2 text-sm border border-indigo-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={emailForResend}
+                  onChange={(e) => setEmailForResend(e.target.value)}
+                />
+                <button
+                  onClick={handleResend}
+                  className="px-3 py-2 bg-indigo-600 text-white text-xs font-bold rounded-md hover:bg-indigo-700 transition-colors"
+                >
+                  Resend Link
+                </button>
+              </div>
+            </div>
+          )}
+
           <form className="space-y-6" onSubmit={handleSubmit(handleLogin)}>
-                        <div>
+            <div>
               <label htmlFor="username" className="block text-sm font-semibold text-slate-700 mb-1">
                 Username
               </label>
@@ -63,6 +111,7 @@ const LoginPage = (props: Props) => {
                 )}
               </div>
             </div>
+
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-1">
                 Password
@@ -82,6 +131,7 @@ const LoginPage = (props: Props) => {
                 )}
               </div>
             </div>
+
             <div className="flex items-center justify-end">
               <div className="text-sm">
                 <Link to="#" className="font-semibold text-brandBlue hover:text-blue-700 transition-colors">
@@ -89,6 +139,7 @@ const LoginPage = (props: Props) => {
                 </Link>
               </div>
             </div>
+
             <div>
               <button
                 type="submit"
@@ -98,6 +149,7 @@ const LoginPage = (props: Props) => {
               </button>
             </div>
           </form>
+
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
