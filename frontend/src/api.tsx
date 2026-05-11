@@ -140,3 +140,23 @@ export const getEstimates = async (query: string) => {
     return error.message;
   }
 };
+
+export interface IndexQuote {
+  symbol: string;
+  name: string;
+  price: number;
+  changesPercentage: number;
+  change: number;
+}
+
+const api = "https://localhost:7002/api/";
+
+export const getMajorIndexesAPI = async () => {
+  try {
+    const response = await axios.get<IndexQuote[]>(api + "market/indexes");
+    return response.data;
+  } catch (error) {
+    console.error("Помилка при завантаженні індексів:", error);
+    throw error;
+  }
+};

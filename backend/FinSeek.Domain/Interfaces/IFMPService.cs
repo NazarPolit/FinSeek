@@ -1,4 +1,5 @@
-﻿using FinSeek.Domain.Entities;
+﻿using FinSeek.Application.DTOs.Market;
+using FinSeek.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace FinSeek.Domain.Interfaces
 	{
 		Task<Stock> FindStockBySymbolAsync(string symbol);
 		Task<string> GetKeyMetricsAsync(string symbol);
-	}
+        Task<List<IndexQuote>> GetMajorIndexesAsync();
+    }
 }

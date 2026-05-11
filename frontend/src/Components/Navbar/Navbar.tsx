@@ -25,9 +25,9 @@ const Navbar = (props: Props) => {
                 Portfolio
               </Link>
             )}
-            <a href="#" className="text-slate-500 hover:text-brandBlue transition-colors duration-200">
+            <Link to="/markets" className="text-slate-500 hover:text-brandBlue transition-colors duration-200">
               Markets
-            </a>
+            </Link>
           </div>
         </div>
 

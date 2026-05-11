@@ -1,4 +1,5 @@
-﻿using FinSeek.Application.DTOs.Stock;
+﻿using FinSeek.Application.DTOs.Market;
+using FinSeek.Application.DTOs.Stock;
 using FinSeek.Domain.Entities;
 using FinSeek.Domain.Interfaces;
 using FinSeek.Infrastructure.Extensions;
@@ -69,5 +70,43 @@ namespace FinSeek.Infrastructure.Services
 				return null;
 			}
 		}
-	}
+        public async Task<List<IndexQuote>> GetMajorIndexesAsync()
+        {
+            try
+            {
+                var symbols = new[] { "AAPL", "JPM", "XOM" };
+
+                var tasks = symbols.Select(async symbol =>
+                {
+                    var url = $"https://financialmodelingprep.com/stable/quote?symbol={symbol}&apikey={_config["FMPKey"]}";
+                    var response = await _httpClient.GetAsync(url);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var data = JsonConvert.DeserializeObject<List<IndexQuote>>(content);
+                        return data?.FirstOrDefault();
+                    }
+                    return null;
+                });
+
+                var results = await Task.WhenAll(tasks);
+                var validIndexes = results.Where(r => r != null).ToList();
+
+                foreach (var item in validIndexes)
+                {
+                    if (item.Symbol == "AAPL") item.Name = "Apple (Tech)";
+                    if (item.Symbol == "JPM") item.Name = "JPMorgan (Finance)";
+                    if (item.Symbol == "XOM") item.Name = "ExxonMobil (Energy)";
+                }
+
+                return validIndexes;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nFMP INDEX FETCH ERROR: {ex.Message}\n");
+                return null;
+            }
+        }
+    }
 }
