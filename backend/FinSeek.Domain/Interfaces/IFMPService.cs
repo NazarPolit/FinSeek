@@ -10,5 +10,6 @@ namespace FinSeek.Domain.Interfaces
 	public interface IFMPService
 	{
 		Task<Stock> FindStockBySymbolAsync(string symbol);
+		Task<string> GetKeyMetricsAsync(string symbol);
 	}
 }

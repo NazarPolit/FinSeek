@@ -1,6 +1,8 @@
 ﻿using FinSeek.Application.Interfaces;
 using FinSeek.Domain.Entities;
+using FinSeek.Domain.Interfaces;
 using FinSeek.Infrastructure.Data;
+using FinSeek.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -62,7 +64,8 @@ namespace FinSeek.Infrastructure
 
 			services.AddScoped<IApplicationDbContext>(provider =>
 				provider.GetService<ApplicationDbContext>());
-
+			services.AddHttpClient<IAiFundamentalService, GeminiFundamentalService>();
+			services.AddScoped<IAiFundamentalService, GeminiFundamentalService>();
 			return services;
 		}
 	}

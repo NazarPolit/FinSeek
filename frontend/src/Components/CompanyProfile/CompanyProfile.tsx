@@ -8,6 +8,7 @@ import CompFinder from '../CompFinder/CompFinder';
 import AnalystEstimates from '../AnalystEstimates/AnalystEstimates';
 import { formatLargeNonMonetaryNumber, formatRatio } from '../../Helpers/NumberFormatting.tsx';
 import StockComment from '../StockComment/StockComment';
+import AiHealthCard from '../AiHealthCard/AiHealthCard';
 
 interface Props {}
 
@@ -142,7 +143,7 @@ const CompanyProfile = (props: Props) => {
             <h3 className="text-lg font-bold text-slate-800 mb-4">Key Metrics Overview</h3>
             <RatioList config={tableConfig} data={companyMetrics} />
           </div>
-          
+          <AiHealthCard symbol={ticker} />
           <StockComment stockSymbol={ticker} />
         </div>
       ) : null}

@@ -27,7 +27,7 @@ namespace FinSeek.Infrastructure.Services
 			try
 			{
 				var result = await _httpClient.GetAsync(
-					$"https://financialmodelingprep.com/stable/profile?symbol={symbol}&apikey={_config["FMPKey"]}"
+					$"https://financialmodelingprep.com/stable/key-metrics?symbol={symbol}&apikey={_config["FMPKey"]}"
 				);
 
 				if (result.IsSuccessStatusCode)
@@ -40,6 +40,26 @@ namespace FinSeek.Infrastructure.Services
 						return stock.ToStockFromFmp();
 					}
 					return null;
+				}
+				return null;
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				return null;
+			}
+		}
+		public async Task<string> GetKeyMetricsAsync(string symbol)
+		{
+			try
+			{
+				var result = await _httpClient.GetAsync(
+					$"https://financialmodelingprep.com/stable/key-metrics-ttm?symbol={symbol}&apikey={_config["FMPKey"]}"
+				);
+
+				if (result.IsSuccessStatusCode)
+				{
+					return await result.Content.ReadAsStringAsync();
 				}
 				return null;
 			}

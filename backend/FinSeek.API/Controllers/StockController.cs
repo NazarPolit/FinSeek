@@ -2,6 +2,7 @@
 using FinSeek.Application.DTOs.Stock;
 using FinSeek.Application.Features.Stocks.Commands;
 using FinSeek.Application.Features.Stocks.Queries.GetStockComments;
+using FinSeek.Application.Features.Stocks.Queries.GetStockHealth;
 using FinSeek.Application.Features.Stocks.Queries.GetStockList;
 using FinSeek.Domain.Helpers;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,7 @@ namespace FinSeek.API.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[Authorize]
 		public async Task<ActionResult<StockCommentsVm>> GetById(int id)
 		{
 			var query = new GetStockCommentsQuery
@@ -46,6 +48,7 @@ namespace FinSeek.API.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<ActionResult<int>> CreateStock([FromBody] CreateStockDto createStockDto)
 		{
 			var command = _mapper.Map<CreateStockCommand>(createStockDto);
@@ -54,6 +57,7 @@ namespace FinSeek.API.Controllers
 		}
 
 		[HttpPut("{id}")]
+		[Authorize]
 		public async Task <IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateStockDto updateStockDto)
 		{
 			var command = _mapper.Map<UpdateStockCommand>(updateStockDto);
@@ -66,6 +70,7 @@ namespace FinSeek.API.Controllers
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize]
 		public async Task<IActionResult> DeleteStock(int id)
 		{
 			var command = new DeleteStockCommand
@@ -77,5 +82,20 @@ namespace FinSeek.API.Controllers
 
 			return NoContent();
 		}
-    }
+
+		[HttpGet("{symbol}/health")]
+		[Authorize] 
+		public async Task<IActionResult> GetStockHealth(string symbol)
+		{
+			var query = new GetStockHealthQuery { Symbol = symbol };
+			var result = await Mediator.Send(query);
+
+			if (result == null)
+			{
+				return NotFound("Could not analyze fundamental health for this stock.");
+			}
+
+			return Ok(result);
+		}
+	}
 }
