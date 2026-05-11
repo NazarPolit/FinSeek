@@ -29,5 +29,19 @@ namespace FinSeek.API.Controllers
 
             return Ok(indexes);
         }
+
+        [HttpGet("gainers")]
+        public async Task<IActionResult> GetGainers()
+        {
+            var gainers = await _fmpService.GetTopGainersAsync();
+            return gainers != null ? Ok(gainers) : StatusCode(500, "Could not fetch gainers");
+        }
+
+        [HttpGet("losers")]
+        public async Task<IActionResult> GetLosers()
+        {
+            var losers = await _fmpService.GetTopLosersAsync();
+            return losers != null ? Ok(losers) : StatusCode(500, "Could not fetch losers");
+        }
     }
 }

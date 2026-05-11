@@ -1,5 +1,6 @@
 import React from "react";
 import MarketIndexes from "../../Components/Market/MarketIndexes";
+import MarketMovers from "../../Components/MarketMovers/MarketMovers";
 
 type Props = {};
 
@@ -19,7 +20,7 @@ const MarketsPage = (props: Props) => {
 
       <div className="max-w-7xl mx-auto -mt-8 px-4 sm:px-6 lg:px-8 pb-12 z-10 relative">
         <MarketIndexes />
-
+        <MarketMovers />
       </div>
     </div>
   );

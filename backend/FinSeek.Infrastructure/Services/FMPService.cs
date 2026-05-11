@@ -2,6 +2,7 @@
 using FinSeek.Application.DTOs.Stock;
 using FinSeek.Domain.Entities;
 using FinSeek.Domain.Interfaces;
+using FinSeek.Domain.Models;
 using FinSeek.Infrastructure.Extensions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -28,7 +29,7 @@ namespace FinSeek.Infrastructure.Services
 			try
 			{
 				var result = await _httpClient.GetAsync(
-					$"https://financialmodelingprep.com/stable/key-metrics?symbol={symbol}&apikey={_config["FMPKey"]}"
+					$"https://financialmodelingprep.com/stable/profile?symbol={symbol}&apikey={_config["FMPKey"]}"
 				);
 
 				if (result.IsSuccessStatusCode)
@@ -105,6 +106,55 @@ namespace FinSeek.Infrastructure.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"\nFMP INDEX FETCH ERROR: {ex.Message}\n");
+                return null;
+            }
+        }
+        public async Task<List<MarketMover>> GetTopGainersAsync()
+        {
+            try
+            {
+                var url = $"https://financialmodelingprep.com/stable/biggest-gainers?apikey={_config["FMPKey"]}";
+                var response = await _httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<List<MarketMover>>(content);
+                    return data?.Take(5).ToList();
+                }
+                else
+                {
+                    Console.WriteLine($"\nFMP GAINERS ERROR: {response.StatusCode}\n");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nEXCEPTION: {ex.Message}\n");
+                return null;
+            }
+        }
+
+        public async Task<List<MarketMover>> GetTopLosersAsync()
+        {
+            try
+            {
+                var url = $"https://financialmodelingprep.com/stable/biggest-losers?apikey={_config["FMPKey"]}";
+                var response = await _httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var data = JsonConvert.DeserializeObject<List<MarketMover>>(content);
+                    return data?.Take(5).ToList();
+                }
+                else
+                {
+                    Console.WriteLine($"\nFMP LOSERS ERROR: {response.StatusCode}\n");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nEXCEPTION: {ex.Message}\n");
                 return null;
             }
         }

@@ -160,3 +160,21 @@ export const getMajorIndexesAPI = async () => {
     throw error;
   }
 };
+
+export interface MarketMover {
+  symbol: string;
+  name: string;
+  price: number;
+  changesPercentage: number;
+  change: number;
+}
+
+export const getGainersAPI = async () => {
+  const response = await axios.get<MarketMover[]>(api + "market/gainers");
+  return response.data;
+};
+
+export const getLosersAPI = async () => {
+  const response = await axios.get<MarketMover[]>(api + "market/losers");
+  return response.data;
+};
