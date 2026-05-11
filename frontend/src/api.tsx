@@ -178,3 +178,19 @@ export const getLosersAPI = async () => {
   const response = await axios.get<MarketMover[]>(api + "market/losers");
   return response.data;
 };
+
+export interface SectorPerformance {
+  date: string;
+  sector: string;
+  averageChange: number;
+}
+
+export const getMarketMoodAPI = async () => {
+  const response = await axios.get<{ mood: string }>(api + "market/mood");
+  return response.data.mood;
+};
+
+export const getSectorsAPI = async () => {
+  const response = await axios.get<SectorPerformance[]>(api + "market/sectors");
+  return response.data;
+};

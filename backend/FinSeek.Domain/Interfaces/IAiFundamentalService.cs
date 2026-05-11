@@ -9,5 +9,6 @@ namespace FinSeek.Domain.Interfaces
 	public interface IAiFundamentalService
 	{
 		Task<string> AnalyzeHealthAsync(string symbol, string metricsJson);
-	}
+        Task<string> GetMarketMoodAsync(string marketDataSummary);
+    }
 }

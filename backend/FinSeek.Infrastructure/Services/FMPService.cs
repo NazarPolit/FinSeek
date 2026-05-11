@@ -158,5 +158,34 @@ namespace FinSeek.Infrastructure.Services
                 return null;
             }
         }
+        public async Task<List<SectorPerformance>> GetSectorPerformanceAsync()
+        {
+            try
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    var targetDate = DateTime.UtcNow.AddDays(-i).ToString("yyyy-MM-dd");
+                    var url = $"https://financialmodelingprep.com/stable/sector-performance-snapshot?date={targetDate}&apikey={_config["FMPKey"]}";
+
+                    var response = await _httpClient.GetAsync(url);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        var data = JsonConvert.DeserializeObject<List<SectorPerformance>>(content);
+
+                        if (data != null && data.Count > 0)
+                        {
+                            return data.OrderByDescending(x => x.AverageChange).ToList();
+                        }
+                    }
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nFMP SECTORS ERROR: {ex.Message}\n");
+                return null;
+            }
+        }
     }
 }

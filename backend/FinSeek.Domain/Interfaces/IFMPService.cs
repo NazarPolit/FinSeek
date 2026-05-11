@@ -16,5 +16,6 @@ namespace FinSeek.Domain.Interfaces
         Task<List<IndexQuote>> GetMajorIndexesAsync();
         Task<List<MarketMover>> GetTopGainersAsync();
         Task<List<MarketMover>> GetTopLosersAsync();
+        Task<List<SectorPerformance>> GetSectorPerformanceAsync();
     }
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import MarketIndexes from "../../Components/Market/MarketIndexes";
 import MarketMovers from "../../Components/MarketMovers/MarketMovers";
+import AiMarketMood from "../../Components/Market/AiMarketMood";
+import MarketSectors from "../../Components/Market/MarketSectors";
 
 type Props = {};
 
@@ -19,7 +21,9 @@ const MarketsPage = (props: Props) => {
       </div>
 
       <div className="max-w-7xl mx-auto -mt-8 px-4 sm:px-6 lg:px-8 pb-12 z-10 relative">
+        <AiMarketMood />
         <MarketIndexes />
+        <MarketSectors />
         <MarketMovers />
       </div>
     </div>
