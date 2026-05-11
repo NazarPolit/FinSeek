@@ -10,7 +10,7 @@ type Props = {
 
 const CompanyDashboard = ({children, ticker, companyData}: Props) => {
   return (
-    <div className="relative md:ml-64 bg-slate-50 min-h-screen flex flex-col w-full md:w-[calc(100%-16rem)]">
+    <div className="relative bg-slate-50 min-h-screen flex flex-col flex-1 w-full min-w-0">
         
         <div className="relative pt-12 pb-32 bg-gradient-to-r from-brandBlue to-blue-700 shadow-md">
             <div className="px-6 md:px-10 mx-auto max-w-7xl">
@@ -29,8 +29,7 @@ const CompanyDashboard = ({children, ticker, companyData}: Props) => {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                         <Tile title="Symbol" subTitle={ticker} />
                         <Tile title="Price" subTitle={companyData.price ? `$${companyData.price.toFixed(2)}` : "N/A"} />
-                                                <Tile title="Industry" subTitle={companyData.industry || "N/A"} />
-                        
+                        <Tile title="Industry" subTitle={companyData.industry || "N/A"} />
                         <Tile title="Sector" subTitle={companyData.sector || "N/A"} />
                     </div>
                 </>

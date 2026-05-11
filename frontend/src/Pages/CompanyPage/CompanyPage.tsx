@@ -36,7 +36,7 @@ const CompanyPage = (props: Props) => {
             <div className="p-4 bg-red-50 text-red-600 rounded-xl font-medium border border-red-100">{error}</div>
         </div>
       ) : company ? (
-        <div className="w-full relative flex ct-docs-disable-sidebar-content overflow-x-hidden">
+        <div className="w-full relative flex ct-docs-disable-sidebar-content">
             <SideBar />
             
             <CompanyDashboard ticker={ticker!} companyData={company}>
