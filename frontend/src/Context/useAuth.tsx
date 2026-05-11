@@ -59,7 +59,19 @@ export const UserProvider = ({ children }: Props) => {
           navigate("/search");
         }
       })
-      .catch((e) => toast.warning("Server error occured"));
+      .catch((e: any) => {
+          const errors = e?.response?.data;
+          
+          if (Array.isArray(errors)) {
+              for (let err of errors) {
+                  toast.warning(err.description);
+              }
+          } else if (typeof errors === "string") {
+              toast.warning(errors);
+          } else {
+              toast.warning("Server error occured");
+          }
+      });
   };
 
   const loginUser = async (username: string, password: string) => {

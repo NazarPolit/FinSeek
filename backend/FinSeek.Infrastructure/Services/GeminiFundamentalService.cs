@@ -33,10 +33,6 @@ namespace FinSeek.Infrastructure.Services
                     ""explanation"": ""Your simple and clear explanation in English in 3-4 sentences.""
                 }}";
 
-				Console.WriteLine("\n================ GEMINI EXACT PROMPT ================");
-				Console.WriteLine(prompt);
-				Console.WriteLine("=====================================================\n");
-
 				var response = await client.Models.GenerateContentAsync(
 					model: "gemini-2.5-flash",
 					contents: prompt

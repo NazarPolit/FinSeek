@@ -58,19 +58,19 @@ namespace FinSeek.API.Controllers
 					}
 					else
 					{
-						return StatusCode(500, roleResult.Errors);
-					}
+                        return BadRequest(roleResult.Errors);
+                    }
 				}
 				else
 				{
-					return StatusCode(500, createUser.Errors);
-				}
+                    return BadRequest(createUser.Errors);
+                }
 			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, ex);
-			}
-		}
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
 		[HttpPost("login")]
 		public async Task<IActionResult> Login([FromBody] LoginDto loginDto)

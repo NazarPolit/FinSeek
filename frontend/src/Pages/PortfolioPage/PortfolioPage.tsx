@@ -45,7 +45,6 @@ const PortfolioPage = (props: Props) => {
 
   return (
     <div className="min-h-[calc(100vh-80px)] bg-slate-50">
-      {/* Красивий Header сторінки */}
       <div className="bg-brandBlue py-12 px-4 sm:px-6 lg:px-8 shadow-inner">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl font-extrabold text-white tracking-tight sm:text-5xl">
@@ -57,7 +56,6 @@ const PortfolioPage = (props: Props) => {
         </div>
       </div>
 
-      {/* Тіло сторінки зі списком */}
       <div className="max-w-7xl mx-auto -mt-8 px-4 sm:px-6 lg:px-8 pb-12">
         {loading ? (
           <div className="flex justify-center items-center h-40 bg-white rounded-2xl shadow-sm border border-slate-100">
