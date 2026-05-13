@@ -12,7 +12,7 @@ const MarketIndexes = () => {
         const data = await getMajorIndexesAPI();
         setIndexes(data);
       } catch (err) {
-        setError("Failed to load market data");
+        setError("Failed to load market indices.");
       } finally {
         setIsLoading(false);
       }
@@ -23,54 +23,59 @@ const MarketIndexes = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-32 animate-pulse">
-        <p className="text-slate-500 font-medium">Завантаження індексів...</p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+        {[1, 2, 3].map(i => (
+          <div key={i} className="bg-white h-32 rounded-xl border border-slate-200"></div>
+        ))}
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-4 bg-red-50 text-red-600 rounded-xl border border-red-100">
+      <div className="p-4 bg-white text-rose-600 rounded-xl border border-rose-200 text-sm font-medium">
         {error}
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {indexes.map((idx) => {
         const isPositive = idx.change >= 0;
-        const colorClass = isPositive ? "text-green-600" : "text-red-600";
-        const bgClass = isPositive ? "bg-green-50" : "bg-red-50";
-        const arrow = isPositive ? "▲" : "▼";
-
+        const colorClass = isPositive ? "text-emerald-600" : "text-rose-600";
+        
         return (
           <div
             key={idx.symbol}
-            className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
+            className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
           >
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-slate-800 text-lg">{idx.name}</h3>
-              <span className="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md">
-                {idx.symbol.replace("^", "")}
-              </span>
+            <div className="flex justify-between items-start mb-2">
+              <div>
+                <h3 className="font-bold text-slate-900">{idx.name}</h3>
+                <span className="text-xs font-semibold text-slate-500">
+                  {idx.symbol.replace("^", "")}
+                </span>
+              </div>
             </div>
 
-            <div className="text-3xl font-extrabold text-slate-900 mb-2">
-              ${idx.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-            </div>
-
-            <div className={`flex items-center gap-2 font-semibold ${colorClass}`}>
-              <span className={`flex items-center justify-center w-6 h-6 rounded-full ${bgClass} text-xs`}>
-                {arrow}
-              </span>
-              <span>
-                {isPositive ? "+" : ""}{idx.change.toFixed(2)}
-              </span>
-              <span className="text-sm">
-                ({isPositive ? "+" : ""}{idx.changesPercentage.toFixed(2)}%)
-              </span>
+            <div className="mt-4 flex items-baseline gap-3">
+              <div className="text-2xl font-bold text-slate-900 tracking-tight">
+                ${idx.price.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </div>
+              <div className={`flex items-center font-semibold text-sm ${colorClass}`}>
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {isPositive ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  )}
+                </svg>
+                <span>{Math.abs(idx.change).toFixed(2)}</span>
+                <span className="ml-1 opacity-90">
+                  ({isPositive ? "+" : ""}{idx.changesPercentage.toFixed(2)}%)
+                </span>
+              </div>
             </div>
           </div>
         );

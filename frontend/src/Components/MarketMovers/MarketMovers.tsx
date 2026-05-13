@@ -23,41 +23,39 @@ const MarketMovers = () => {
     fetchData();
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center py-10">
-        <div className="w-8 h-8 border-4 border-brandBlue border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  if (isLoading) return null;
 
   const renderList = (items: MarketMover[], type: "gainers" | "losers") => {
     const isGainer = type === "gainers";
-    const colorClass = isGainer ? "text-green-600" : "text-red-600";
-    const bgClass = isGainer ? "bg-green-50" : "bg-red-50";
+    const title = isGainer ? "Top Gainers" : "Top Losers";
+    const colorClass = isGainer ? "text-emerald-600" : "text-rose-600";
+    const Icon = isGainer ? (
+      <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+    ) : (
+      <svg className="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6" /></svg>
+    );
 
     return (
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex-1">
-        <div className={`px-6 py-4 border-b border-slate-100 ${bgClass}`}>
-          <h3 className={`text-lg font-bold ${colorClass}`}>
-            {isGainer ? "🔥 Top Gainers" : "📉 Top Losers"}
-          </h3>
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex-1">
+        <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
+          {Icon}
+          <h3 className="text-base font-bold text-slate-900">{title}</h3>
         </div>
         <ul className="divide-y divide-slate-100">
           {items.map((item) => (
             <li key={item.symbol} className="hover:bg-slate-50 transition-colors">
-              <Link to={`/company/${item.symbol}`} className="flex items-center justify-between px-6 py-4">
+              <Link to={`/company/${item.symbol}`} className="flex items-center justify-between px-5 py-3">
                 <div className="flex flex-col overflow-hidden pr-4">
-                  <span className="font-bold text-slate-900">{item.symbol}</span>
-                  <span className="text-sm text-slate-500 truncate whitespace-nowrap">
+                  <span className="font-bold text-slate-900 text-sm">{item.symbol}</span>
+                  <span className="text-xs font-medium text-slate-500 truncate whitespace-nowrap">
                     {item.name}
                   </span>
                 </div>
                 <div className="flex flex-col items-end shrink-0">
-                  <span className="font-bold text-slate-800">
+                  <span className="font-bold text-slate-900 text-sm">
                     ${item.price.toFixed(2)}
                   </span>
-                  <span className={`text-sm font-semibold ${colorClass}`}>
+                  <span className={`text-xs font-bold ${colorClass}`}>
                     {isGainer ? "+" : ""}{item.changesPercentage.toFixed(2)}%
                   </span>
                 </div>
@@ -70,7 +68,7 @@ const MarketMovers = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 mt-8">
+    <div className="flex flex-col lg:flex-row gap-6">
       {renderList(gainers, "gainers")}
       {renderList(losers, "losers")}
     </div>
