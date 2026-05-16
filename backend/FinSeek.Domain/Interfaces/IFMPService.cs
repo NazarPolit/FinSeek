@@ -1,4 +1,5 @@
-﻿using FinSeek.Application.DTOs.Market;
+﻿using FinSeek.Application.DTOs.FMP;
+using FinSeek.Application.DTOs.Market;
 using FinSeek.Domain.Entities;
 using FinSeek.Domain.Models;
 using System;
@@ -17,5 +18,6 @@ namespace FinSeek.Domain.Interfaces
         Task<List<MarketMover>> GetTopGainersAsync();
         Task<List<MarketMover>> GetTopLosersAsync();
         Task<List<SectorPerformance>> GetSectorPerformanceAsync();
+        Task<List<HistoricalPrice>> GetHistoricalPricesAsync(string symbol, int timeseries = 30);
     }
 }

@@ -194,3 +194,21 @@ export const getSectorsAPI = async () => {
   const response = await axios.get<SectorPerformance[]>(api + "market/sectors");
   return response.data;
 };
+
+export interface PredictionData {
+  date: string;
+  actual: number | null;
+  linear: number | null;
+  ema: number | null;
+  ai: number | null;
+}
+
+export const getPricePredictionAPI = async (symbol: string) => {
+  try {
+    const response = await axios.get<PredictionData[]>(api + `prediction/${symbol}`);
+    return response.data;
+  } catch (error) {
+    console.error("Prediction API Error: ", error);
+    return [];
+  }
+};

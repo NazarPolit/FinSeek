@@ -1,4 +1,5 @@
-﻿using FinSeek.Application.DTOs.Market;
+﻿using FinSeek.Application.DTOs.FMP;
+using FinSeek.Application.DTOs.Market;
 using FinSeek.Application.DTOs.Stock;
 using FinSeek.Domain.Entities;
 using FinSeek.Domain.Interfaces;
@@ -9,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -185,6 +187,36 @@ namespace FinSeek.Infrastructure.Services
             {
                 Console.WriteLine($"\nFMP SECTORS ERROR: {ex.Message}\n");
                 return null;
+            }
+        }
+
+        public async Task<List<HistoricalPrice>> GetHistoricalPricesAsync(string symbol, int daysBack = 30)
+        {
+            try
+            {
+                var toDate = DateTime.UtcNow.ToString("yyyy-MM-dd");
+                var fromDate = DateTime.UtcNow.AddDays(-daysBack).ToString("yyyy-MM-dd");
+
+                var endpoint = $"https://financialmodelingprep.com/stable/historical-price-eod/full?symbol={symbol}&from={fromDate}&to={toDate}&apikey={_config["FMPKey"]}";
+
+                var response = await _httpClient.GetAsync(endpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadFromJsonAsync<List<HistoricalPrice>>();
+
+                    return content ?? new List<HistoricalPrice>();
+                }
+                else
+                {
+                    Console.WriteLine($"FMP Historical API Error: HTTP {response.StatusCode}");
+                    return new List<HistoricalPrice>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"FMP Historical Error: {ex.Message}");
+                return new List<HistoricalPrice>();
             }
         }
     }

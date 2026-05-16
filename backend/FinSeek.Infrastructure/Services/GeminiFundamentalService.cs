@@ -75,5 +75,56 @@ namespace FinSeek.Infrastructure.Services
                 return "Currently unable to retrieve market analysis from AI.";
             }
         }
+        public async Task<List<double>> GetPriceForecastAsync(string symbol, List<double> historicalPrices, int forecastDays)
+        {
+            try
+            {
+                Environment.SetEnvironmentVariable("GOOGLE_API_KEY", _config["GeminiKey"]);
+                var client = new Client();
+
+                var pricesString = string.Join(", ", historicalPrices.Select(p => Math.Round(p, 2)));
+
+                var prompt = $@"
+                    You are an expert financial AI analyst. 
+                    Here are the closing prices of {symbol} stock for the last {historicalPrices.Count} days: [{pricesString}].
+
+                    Based on this trend, volatility, and momentum, predict the closing prices for the next {forecastDays} days.
+
+                    CRITICAL RULE: You MUST respond ONLY with a comma-separated list of {forecastDays} numbers. 
+                    Do not include any text, explanations, symbols like $, or markdown formatting. 
+                    Example of valid response: 150.25, 151.30, 149.80, 152.10, 153.00, 152.50, 154.20";
+
+                var response = await client.Models.GenerateContentAsync(
+                    model: "gemini-2.5-flash",
+                    contents: prompt
+                );
+
+                var aiResponseString = response.Candidates[0].Content.Parts[0].Text.Trim();
+
+                var predictedPrices = aiResponseString
+                    .Split(',')
+                    .Select(s => s.Trim())
+                    .Select(s =>
+                    {
+                        if (double.TryParse(s, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double val))
+                            return val;
+                        return 0.0;
+                    })
+                    .Where(v => v > 0)
+                    .ToList();
+
+                if (predictedPrices.Count >= forecastDays)
+                {
+                    return predictedPrices.Take(forecastDays).ToList();
+                }
+
+                throw new Exception($"AI returned invalid format or not enough days. Raw response: {aiResponseString}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\n[AI FORECAST ERROR]: {ex.Message}\n");
+                return new List<double>();
+            }
+        }
     }
 }

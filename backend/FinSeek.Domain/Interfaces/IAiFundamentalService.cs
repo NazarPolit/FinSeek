@@ -10,5 +10,6 @@ namespace FinSeek.Domain.Interfaces
 	{
 		Task<string> AnalyzeHealthAsync(string symbol, string metricsJson);
         Task<string> GetMarketMoodAsync(string marketDataSummary);
+        Task<List<double>> GetPriceForecastAsync(string symbol, List<double> historicalPrices, int forecastDays);
     }
 }

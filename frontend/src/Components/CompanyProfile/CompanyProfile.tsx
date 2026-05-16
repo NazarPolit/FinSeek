@@ -9,6 +9,7 @@ import AnalystEstimates from '../AnalystEstimates/AnalystEstimates';
 import { formatLargeNonMonetaryNumber, formatRatio } from '../../Helpers/NumberFormatting.tsx';
 import StockComment from '../StockComment/StockComment';
 import AiHealthCard from '../AiHealthCard/AiHealthCard';
+import PricePredictionChart from '../PricePredictionChart/PricePredictionChart';
 
 interface Props {}
 
@@ -139,6 +140,7 @@ const CompanyProfile = (props: Props) => {
         </div>
       ) : companyMetrics ? (
         <div className="flex flex-col gap-6">
+          <PricePredictionChart symbol={ticker} />
           <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-100">
             <h3 className="text-lg font-bold text-slate-800 mb-4">Key Metrics Overview</h3>
             <RatioList config={tableConfig} data={companyMetrics} />

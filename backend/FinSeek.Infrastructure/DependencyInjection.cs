@@ -63,6 +63,7 @@ namespace FinSeek.Infrastructure
             services.AddHttpClient<IAiFundamentalService, GeminiFundamentalService>();
             services.AddScoped<IAiFundamentalService, GeminiFundamentalService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPredictionService, PredictionService>();
 
             return services;
         }
