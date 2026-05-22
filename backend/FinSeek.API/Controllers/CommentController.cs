@@ -69,25 +69,28 @@ namespace FinSeek.API.Controllers
 			);
 		}
 
-		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteComment(int id)
-		{
-			await Mediator.Send(new DeleteCommentCommand { Id = id });
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var username = User.GetUsername();
+            await Mediator.Send(new DeleteCommentCommand { Id = id, Username = username });
+            return NoContent();
+        }
 
-			return NoContent();
-		}
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateComment([FromRoute] int id, [FromBody] UpdateCommentDto updateCommentDto)
+        {
+            var username = User.GetUsername();
+            var command = _mapper.Map<UpdateCommentCommand>(updateCommentDto);
 
-		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateCommentDto updateCommentDto)
-		{
-			var command = _mapper.Map<UpdateCommentCommand>(updateCommentDto);
+            command.Id = id;
+            command.Username = username;
 
-			command.Id = id;
+            await Mediator.Send(command);
+            return NoContent();
+        }
 
-			await Mediator.Send(command);
-
-			return NoContent();
-		}
-
-	}
+    }
 }

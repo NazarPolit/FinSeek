@@ -20,21 +20,22 @@ namespace FinSeek.Application.Features.Comments.Commands
 			_unitOfWork = unitOfWork;
 		}
 
-		public async Task<Unit> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
-		{
-			var entity = await _unitOfWork.Comments.GetByIdAsync(request.Id);
+        public async Task<Unit> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
+        {
+            var entity = await _unitOfWork.Comments.GetByIdWithUserAsync(request.Id);
 
-			if (entity == null)
-			{
-				throw new NotFoundException(nameof(Stock), request.Id);
-			}
+            if (entity == null)
+                throw new NotFoundException(nameof(Comment), request.Id);
 
-			entity.Title = request.Title;
-			entity.Content = request.Content;
+            if (entity.AppUser.UserName != request.Username)
+                throw new UnauthorizedAccessException("You can only edit your own comments.");
 
-			await _unitOfWork.CompleteAsync();
+            entity.Title = request.Title;
+            entity.Content = request.Content;
 
-			return Unit.Value;
-		}
-	}
+            await _unitOfWork.CompleteAsync();
+
+            return Unit.Value;
+        }
+    }
 }

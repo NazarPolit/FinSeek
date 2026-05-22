@@ -21,6 +21,7 @@ const StockComment = ({ stockSymbol }: Props) => {
 
   useEffect(() => {
     getComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getComments = () => {
@@ -57,7 +58,7 @@ const StockComment = ({ stockSymbol }: Props) => {
 
   return (
     <div className="w-full mt-6">
-      {loading ? <Spinner /> : <StockCommentList comments={comments || []} />}
+      {loading ? <Spinner /> : <StockCommentList comments={comments || []} onCommentChange={getComments} />}
       
       <StockCommentForm symbol={stockSymbol} handleComment={handleComment} />
     </div>
