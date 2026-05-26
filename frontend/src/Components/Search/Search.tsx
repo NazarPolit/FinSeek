@@ -30,7 +30,7 @@ const Search: React.FC<Props> = ({onSearchSubmit, search, handleSearchChange}: P
           <input
             className="flex-1 w-full py-3 px-4 text-lg bg-transparent outline-none placeholder-slate-400 text-textMain font-medium"
             id="search-input"
-            placeholder="e.g. AAPL, Microsoft, TSLA..."
+            placeholder="e.g. AAPL, TSLA, META..."
             value={search}
             onChange={handleSearchChange}
             autoComplete="off"
